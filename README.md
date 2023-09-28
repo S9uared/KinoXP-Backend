@@ -1,3 +1,6 @@
+# Link - Group Contract
+https://docs.google.com/document/d/1Qlr3r1MQdCW1n5fGDp0NfRuL0-0dJ6CHjO4mfzymlm4/edit?usp=sharing
+
 # startcode-with-security
 
 [Supplementing Google Doc](https://docs.google.com/document/d/1k5T7rRSrGetjuMdYoErk4ToZTk22QyBpR-x17nmtRos/edit?usp=sharing)
