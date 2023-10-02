@@ -17,7 +17,7 @@ public class StatisticResponse {
 
     String movieName;
 
-    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss",shape = JsonFormat.Shape.STRING)
+    @JsonFormat(pattern = "yyyy-MM-dd",shape = JsonFormat.Shape.STRING)
     LocalDate date;
 
     int totalReservations;
