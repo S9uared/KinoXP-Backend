@@ -30,4 +30,9 @@ public class Statistic{
     @Column(name="total_reservations", nullable = false)
     private int totalReservations;
 
+    public Statistic(/*Movie movie*/, LocalDate date, int totalReservations) {
+        //this.movie = movie;
+        this.date = date;
+        this.totalReservations = totalReservations;
+    }
 }

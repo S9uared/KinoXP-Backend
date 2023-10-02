@@ -15,6 +15,7 @@ import java.time.LocalDate;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class StatisticResponse {
 
+    int id;
     String movieName;
 
     @JsonFormat(pattern = "yyyy-MM-dd",shape = JsonFormat.Shape.STRING)
@@ -24,7 +25,8 @@ public class StatisticResponse {
 
     public StatisticResponse(Statistic s){
         //Implement after merge with movie branch.
-        //movieName = s.getMovie().getName();
+        id = s.getId();
+        movieName = "James bond";//s.getMovie().getName();
         date = s.getDate();
         totalReservations = s.getTotalReservations();
     }
