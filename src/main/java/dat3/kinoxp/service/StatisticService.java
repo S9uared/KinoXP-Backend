@@ -31,6 +31,7 @@ public class StatisticService {
         return statistics.stream().map((statistic) -> new StatisticResponse(statistic)).toList();
     }
 
+    //Can be used if edit feature on statistics is added.
     public StatisticResponse getOneStatisticById(int id){
         Statistic stat = findStatById(id);
         return new StatisticResponse(stat);
@@ -47,9 +48,17 @@ public class StatisticService {
         return new StatisticResponse(newStat);
     }
 
-    public void deleteStatById(int id){
-        Statistic stat = findStatById(id);
-        statisticRepository.delete(stat);
+    public ResponseEntity<Boolean> deleteStatById(int id){
+        if(!statisticRepository.existsById(id)){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Statistic with this id does not exist");
+        }
+        try{
+            statisticRepository.deleteById(id);
+            return ResponseEntity.ok(true);
+        }
+        catch(Exception e){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Could not delete statistic. Maybe because it is connected to a current movie.");
+        }
     }
 
     private Statistic findStatById(int id){
