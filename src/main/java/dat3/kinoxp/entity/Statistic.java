@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -23,9 +25,9 @@ public class Statistic{
     */
 
     @Column(name="date", length=15, nullable = false)
-    private String date;
+    private LocalDate date;
 
-    @Column(name="weekly_reservations", nullable = false)
+    @Column(name="total_reservations", nullable = false)
     private int totalReservations;
 
 }
