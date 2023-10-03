@@ -66,3 +66,4 @@ public class MovieService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Movie with this id does not exist"));
     }
 }
+
