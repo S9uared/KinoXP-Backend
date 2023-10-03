@@ -1,15 +1,15 @@
 package dat3.kinoxp.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@Builder //We will talk about this in the class
 @NoArgsConstructor
 @Entity
 public class Showing {
