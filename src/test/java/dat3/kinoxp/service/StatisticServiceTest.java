@@ -1,14 +1,22 @@
 package dat3.kinoxp.service;
 
+import dat3.kinoxp.dto.StatisticRequest;
+import dat3.kinoxp.dto.StatisticResponse;
 import dat3.kinoxp.entity.Statistic;
 import dat3.kinoxp.repository.StatisticRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.http.HttpStatus;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
-
+@ExtendWith(SpringExtension.class)
 @DataJpaTest
 class StatisticServiceTest {
 
@@ -38,23 +46,44 @@ class StatisticServiceTest {
 
     @Test
     void testAddStatisticSuccess() {
-
+        StatisticRequest request = StatisticRequest.builder().
+                movieId(1).
+                date(LocalDate.now().minusDays(2)).
+                build();
+        StatisticResponse response = statisticService.addStatistic(request);
+        assertEquals(4, response.getId());
+        assertTrue(statisticRepository.existsById(4));
     }
+
     @Test
     void testAddStatisticFutureDateException() {
-
+        StatisticRequest request = StatisticRequest.builder().
+                movieId(1).
+                date(LocalDate.now().plusDays(1)).
+                build();
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> statisticService.addStatistic(request));
+        assertEquals(HttpStatus.BAD_REQUEST, exception.getStatusCode());
     }
+
     @Test
     void testAddStatisticMovieNot_FoundException() {
-
+        StatisticRequest request = StatisticRequest.builder().
+                movieId(3).
+                date(LocalDate.now().minusDays(1)).
+                build();
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> statisticService.addStatistic(request));
+        assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
     }
 
     @Test
     void testDeleteStatByIdSuccess() {
-
+        statisticService.deleteStatById(2);
+        assertFalse(statisticRepository.existsById(2));
     }
+
     @Test
     void testDeleteStatByIdStatNotFoundException() {
-
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> statisticService.deleteStatById(5));
+        assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
     }
 }
