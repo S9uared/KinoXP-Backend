@@ -50,9 +50,9 @@ public class ReservationController {
         return new ResponseEntity<>(reservations, HttpStatus.OK);
     }
 
+    @GetMapping("/{showingId}/{reservationId}")
     public Reservation viewReservationById(Long showingId, Long reservationId) {
-        // Fetch the reservation by ID
-        Reservation reservation = ReservationRepository.findById(reservationId).orElse(null);
+        Reservation reservation = ReservationService.viewReservationById(showingId, reservationId);
 
         // Check if the reservation exists and if its showingId matches the provided showingId
         if (reservation != null && reservation.getShowingId().equals(showingId)) {
@@ -68,5 +68,4 @@ public class ReservationController {
         reservationService.deleteReservation(reservationId, showingId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-
 }

@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface ReservationRepository extends CrudRepository<Reservation, Long> {
     List<Reservation> findByShowing_Movie_Id(Long movieId);
+
+    List<Reservation> findByShowingId(Long showingId);
 }

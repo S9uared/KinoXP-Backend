@@ -11,17 +11,16 @@ import java.util.Optional;
 @Service
 public class ReservationService {
     @Autowired
-    private ReservationRepository reservationRepository;
+    private static ReservationRepository reservationRepository;
 
-    // Implement methods for creating, editing, viewing, and deleting reservations
     // Create a reservation
     public Reservation createReservation(Reservation reservation) {
         return reservationRepository.save(reservation);
     }
 
     // Edit a reservation
-    public Reservation editReservation(Long id, Reservation updatedReservation) {
-        Optional<Reservation> existingReservationOptional = reservationRepository.findById(id);
+    public Reservation editReservation(Long reservationId, Reservation updatedReservation) {
+        Optional<Reservation> existingReservationOptional = reservationRepository.findById(reservationId);
         if (existingReservationOptional.isPresent()) {
             Reservation existingReservation = existingReservationOptional.get();
             // Update fields
@@ -30,28 +29,42 @@ public class ReservationService {
             existingReservation.setNumber(updatedReservation.getNumber());
             return reservationRepository.save(existingReservation);
         } else {
-            throw new RuntimeException("Reservation not found with id: " + id);
+            throw new RuntimeException("Reservation not found with id: " + reservationId);
         }
     }
 
-    // View a reservation
-    public List<Reservation> viewReservation() {
+    // View reservations
+    public List<Reservation> getAllReservations() {
         return (List<Reservation>) reservationRepository.findAll();
     }
 
     // View a reservation by id
-    public Reservation viewReservationById(Long reservationId) {
+    public static Reservation viewReservationById(Long showingId, Long reservationId) {
         Optional<Reservation> reservationOptional = reservationRepository.findById(reservationId);
-        return reservationOptional.orElse(null);
+        if (reservationOptional.isPresent()) {
+            Reservation reservation = reservationOptional.get();
+            if (reservation.getShowingId().equals(showingId)) {
+                return reservation;
+            } else {
+                throw new RuntimeException("Reservation does not belong to the specified showing");
+            }
+        } else {
+            throw new RuntimeException("Reservation not found with id: " + reservationId);
+        }
     }
 
     // Delete a reservation
-    public void deleteReservation(Long id, Long showingId) {
-        Optional<Reservation> reservationOptional = reservationRepository.findById(id);
+    public void deleteReservation(Long showingId, Long reservationId) {
+        Optional<Reservation> reservationOptional = reservationRepository.findById(reservationId);
         if (reservationOptional.isPresent()) {
-            reservationRepository.deleteById(id);
+            Reservation reservation = reservationOptional.get();
+            if (reservation.getShowingId().equals(showingId)) {
+                reservationRepository.deleteById(reservationId);
+            } else {
+                throw new RuntimeException("Reservation does not belong to the specified showing");
+            }
         } else {
-            throw new RuntimeException("Reservation not found with id: " + id);
+            throw new RuntimeException("Reservation not found with id: " + reservationId);
         }
     }
 
