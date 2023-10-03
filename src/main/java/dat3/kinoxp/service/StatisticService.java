@@ -80,7 +80,7 @@ public class StatisticService {
 
     public ResponseEntity<Boolean> deleteStatById(int id){
         if(!statisticRepository.existsById(id)){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Statistic with this id does not exist");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Statistic with this id does not exist");
         }
         try{
             statisticRepository.deleteById(id);
