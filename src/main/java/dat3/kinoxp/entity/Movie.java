@@ -3,6 +3,8 @@ package dat3.kinoxp.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -25,9 +27,17 @@ public class Movie {
     @Column(name = "category")
     private String category;
 
+    @Column(name = "created")
+    private LocalDateTime created; // Added field for creation timestamp
+
+    @Column(name = "edited")
+    private LocalDateTime edited;
+
     public Movie(String movieName, int ageRestriction, String category) {
         this.movieName = movieName;
         this.ageRestriction = ageRestriction;
         this.category = category;
     }
+
+
 }
