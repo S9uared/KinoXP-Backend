@@ -52,12 +52,20 @@ public class StatisticService {
     }
 
     private int calculateStatisticForMovie(int movieId, LocalDate date){
-        double average = 100;
-        int result;
+        double result = 100;
+        int reservations = 0;
         //List contains last 7 days from given date.
-        List<LocalDate> dateList = new ArrayList<>();
+        LocalDate currentDate;
+        List<Integer> showingList = new ArrayList<>();
         for(int i = 0; i < 7; i++){
-            dateList.add(LocalDate.now().minusDays(i));
+            currentDate = date.minusDays(i);
+            //showingList = getShowingsByMovieIdAndDate(movieId, currentDate);
+            for(Integer num : showingList){
+                //reservations = getReservationCountByShowingId(num); Do this, or get a list and get .size() on the list instead.
+
+                result += reservations;
+            }
+
         }
         //Get list of all showings matching movieId and all dates in the list.
         //For each showing use method like get reservationsByShowingId from reservationRepo in a loop. And get size
@@ -65,8 +73,8 @@ public class StatisticService {
         //In every iteration of loop take theaterId from showing and get Theater size too. Calculate % by
         // dividing reservations with theatersize. Add them all together and divide by 7 at the end.
 
-        result = (int) average * 100;
-        return result;
+        result = result/7;
+        return (int) result * 100;
     }
 
 
