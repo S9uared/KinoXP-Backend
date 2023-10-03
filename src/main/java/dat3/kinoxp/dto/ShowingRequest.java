@@ -19,4 +19,11 @@ public class ShowingRequest {
     private LocalTime time;
     private int movieId;
     private int theaterId;
+
+    public ShowingRequest(LocalDate date, LocalTime time, int movieId, int theaterId) {
+        this.date = date;
+        this.time = time;
+        this.movieId = movieId;
+        this.theaterId = theaterId;
+    }
 }
