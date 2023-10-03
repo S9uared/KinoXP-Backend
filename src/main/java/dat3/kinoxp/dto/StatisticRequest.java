@@ -10,23 +10,13 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
+@AllArgsConstructor//Has this constructor for @requestbody
 @Builder
 public class StatisticRequest {
 
-    private int id;
 
     private int movieId;
 
     @JsonFormat(pattern = "yyyy-MM-dd",shape = JsonFormat.Shape.STRING)
     private LocalDate date;
-
-    private int totalReservations;
-
-
-    public StatisticRequest(Statistic s){
-        this.id = s.getId();
-        this.date = s.getDate();
-        this.totalReservations = s.getTotalReservations();
-    }
 }

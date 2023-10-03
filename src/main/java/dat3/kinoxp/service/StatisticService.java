@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -38,15 +40,35 @@ public class StatisticService {
     }
 
     public StatisticResponse addStatistic(StatisticRequest body){
-        if(statisticRepository.existsById(body.getId())){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "This statistic already exists");
+        if(body.getDate().isAfter(LocalDate.now())){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Date in the future is not allowed. Choose a current or previous date for this statistic");
         }
         //Movie movie = movieRepository.findById(body.getMovieId()).orElseThrow(
         //            () -> new ResponseStatusException(HttpStatus.NOT_FOUND,"No member with this id found"));;
 
-        Statistic newStat = statisticRepository.save(new Statistic(/*movie,*/body.getDate(), body.getTotalReservations()));
+        int totalReservations = calculateStatisticForMovie(body.getMovieId(), body.getDate());
+        Statistic newStat = statisticRepository.save(new Statistic(/*movie,*/body.getDate(), totalReservations));
         return new StatisticResponse(newStat);
     }
+
+    private int calculateStatisticForMovie(int movieId, LocalDate date){
+        double average = 100;
+        int result;
+        //List contains last 7 days from given date.
+        List<LocalDate> dateList = new ArrayList<>();
+        for(int i = 0; i < 7; i++){
+            dateList.add(LocalDate.now().minusDays(i));
+        }
+        //Get list of all showings matching movieId and all dates in the list.
+        //For each showing use method like get reservationsByShowingId from reservationRepo in a loop. And get size
+        // of the returned list, or use a method that counts reservations instead if possible.
+        //In every iteration of loop take theaterId from showing and get Theater size too. Calculate % by
+        // dividing reservations with theatersize. Add them all together and divide by 7 at the end.
+
+        result = (int) average * 100;
+        return result;
+    }
+
 
     public ResponseEntity<Boolean> deleteStatById(int id){
         if(!statisticRepository.existsById(id)){
