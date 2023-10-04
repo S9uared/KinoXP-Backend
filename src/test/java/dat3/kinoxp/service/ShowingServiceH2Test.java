@@ -2,8 +2,12 @@ package dat3.kinoxp.service;
 
 import dat3.kinoxp.dto.ShowingRequest;
 import dat3.kinoxp.dto.ShowingResponse;
+import dat3.kinoxp.entity.Movie;
 import dat3.kinoxp.entity.Showing;
+import dat3.kinoxp.entity.Theater;
+import dat3.kinoxp.repository.MovieRepository;
 import dat3.kinoxp.repository.ShowingRepository;
+import dat3.kinoxp.repository.TheaterRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

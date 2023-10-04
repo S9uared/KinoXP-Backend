@@ -1,6 +1,7 @@
 package dat3.kinoxp.api;
 
 import dat3.kinoxp.entity.Reservation;
+import dat3.kinoxp.entity.Showing;
 import dat3.kinoxp.repository.ReservationRepository;
 import dat3.kinoxp.service.ReservationService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -2,8 +2,12 @@ package dat3.kinoxp.service;
 
 import dat3.kinoxp.dto.ShowingRequest;
 import dat3.kinoxp.dto.ShowingResponse;
+import dat3.kinoxp.entity.Movie;
 import dat3.kinoxp.entity.Showing;
+import dat3.kinoxp.entity.Theater;
+import dat3.kinoxp.repository.MovieRepository;
 import dat3.kinoxp.repository.ShowingRepository;
+import dat3.kinoxp.repository.TheaterRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
