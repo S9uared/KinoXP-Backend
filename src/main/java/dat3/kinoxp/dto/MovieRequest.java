@@ -14,7 +14,7 @@ public class MovieRequest {
     private int ageRestriction;
     private String category;
 
-    public static Movie getMovieEntity(MovieRequest movieRequest) {
+    public Movie getMovieEntity(MovieRequest movieRequest) {
         return new Movie(
                 movieRequest.getMovieName(),
                 movieRequest.getAgeRestriction(),

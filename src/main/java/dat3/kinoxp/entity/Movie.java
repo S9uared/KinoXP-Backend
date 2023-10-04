@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -27,11 +29,8 @@ public class Movie {
     @Column(name = "category")
     private String category;
 
-    @Column(name = "created")
-    private LocalDateTime created; // Added field for creation timestamp
-
-    @Column(name = "edited")
-    private LocalDateTime edited;
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    List<Showing> showings;
 
     public Movie(String movieName, int ageRestriction, String category) {
         this.movieName = movieName;
@@ -39,5 +38,10 @@ public class Movie {
         this.category = category;
     }
 
-
+    public void addShowing(Showing showing){
+        if(showings == null){
+            showings = new ArrayList<>();
+        }
+        showings.add(showing);
+    }
 }

@@ -2,7 +2,9 @@ package dat3.kinoxp.service;
 
 import dat3.kinoxp.dto.StatisticRequest;
 import dat3.kinoxp.dto.StatisticResponse;
+import dat3.kinoxp.entity.Movie;
 import dat3.kinoxp.entity.Statistic;
+import dat3.kinoxp.repository.MovieRepository;
 import dat3.kinoxp.repository.StatisticRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,9 +19,11 @@ import java.util.List;
 public class StatisticService {
 
     StatisticRepository statisticRepository;
+    MovieRepository movieRepository;
 
-    public StatisticService(StatisticRepository statisticRepository) {
+    public StatisticService(StatisticRepository statisticRepository, MovieRepository movieRepository) {
         this.statisticRepository = statisticRepository;
+        this.movieRepository = movieRepository;
     }
 
     public List<StatisticResponse> getStatistics(){
@@ -43,11 +47,11 @@ public class StatisticService {
         if(body.getDate().isAfter(LocalDate.now())){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Date in the future is not allowed. Choose a current or previous date for this statistic");
         }
-        //Movie movie = movieRepository.findById(body.getMovieId()).orElseThrow(
-        //            () -> new ResponseStatusException(HttpStatus.NOT_FOUND,"No member with this id found"));;
+        Movie movie = movieRepository.findById(body.getMovieId()).orElseThrow(
+                   () -> new ResponseStatusException(HttpStatus.NOT_FOUND,"No member with this id found"));;
 
         int totalReservations = calculateStatisticForMovie(body.getMovieId(), body.getDate());
-        Statistic newStat = statisticRepository.save(new Statistic(/*movie,*/body.getDate(), totalReservations));
+        Statistic newStat = statisticRepository.save(new Statistic(movie, body.getDate(), totalReservations));
         return new StatisticResponse(newStat);
     }
 

@@ -62,8 +62,8 @@ public class ShowingService {
 
     public ShowingResponse editShowing(ShowingRequest body, int showingId){
         Showing showing = getShowingById(showingId);
-        Movie movie = movieRepository.findById(body.getMovieId());
-        Theater theater = theaterRepository.findById(body.getTheaterId());
+        Movie movie = movieRepository.findById(body.getMovieId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Movie with this id does not exist"));
+        Theater theater = theaterRepository.findById(body.getTheaterId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Theater with this id does not exist"));
         showing.setDate(body.getDate());
         showing.setTime(body.getTime());
         showing.setMovie(movie);

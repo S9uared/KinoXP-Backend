@@ -14,7 +14,6 @@ import java.time.LocalDate;
 @Builder
 public class StatisticRequest {
 
-
     private int movieId;
 
     @JsonFormat(pattern = "yyyy-MM-dd",shape = JsonFormat.Shape.STRING)

@@ -2,14 +2,14 @@ package dat3.kinoxp.entity;
 
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@Builder //We will talk about this in the class
 @NoArgsConstructor
 @Entity
 public class Statistic{
@@ -18,11 +18,8 @@ public class Statistic{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    //Implement after merge with Movie branch
-    /*
     @ManyToOne
     Movie movie;
-    */
 
     @Column(name="date", length=15, nullable = false)
     private LocalDate date;
@@ -30,8 +27,8 @@ public class Statistic{
     @Column(name="total_reservations", nullable = false)
     private int totalReservations;
 
-    public Statistic(/*Movie movie,*/ LocalDate date, int totalReservations) {
-        //this.movie = movie;
+    public Statistic(Movie movie, LocalDate date, int totalReservations) {
+        this.movie = movie;
         this.date = date;
         this.totalReservations = totalReservations;
     }
