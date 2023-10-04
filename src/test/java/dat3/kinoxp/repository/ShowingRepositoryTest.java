@@ -1,6 +1,8 @@
 package dat3.kinoxp.repository;
 
+import dat3.kinoxp.entity.Movie;
 import dat3.kinoxp.entity.Showing;
+import dat3.kinoxp.entity.Theater;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +34,7 @@ class ShowingRepositoryTest {
             movieRepository.save(movie1);
             Theater theater1 = new Theater(1, 400);
             theaterRepository.save(theater1);
-            Showing showing1 = showingRepository.save(new Showing(LocalDate.of(2023, 10, 03), LocalTime.of(16, 30), movie1, theater1));
+            Showing showing1 = showingRepository.save(new Showing(LocalDate.now(), LocalTime.of(16, 30), movie1, theater1));
             showingOneId = showing1.getId();
 
             Movie movie2 = new Movie("Inception", 16, "Thriller");
@@ -58,7 +60,7 @@ class ShowingRepositoryTest {
 
     @Test
     public void testGetByDate(){
-        assertEquals(1, showingRepository.getShowingsByDate(LocalDate.of(2023, 10, 03)).size());
+        assertEquals(1, showingRepository.getShowingsByDate(LocalDate.now()).size());
     }
 
     @Test

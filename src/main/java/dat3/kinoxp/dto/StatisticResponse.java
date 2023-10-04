@@ -24,10 +24,9 @@ public class StatisticResponse {
     int totalReservations;
 
     public StatisticResponse(Statistic s){
-        //Implement after merge with movie branch.
-        id = s.getId();
-        movieName = "James bond";//s.getMovie().getName();
-        date = s.getDate();
-        totalReservations = s.getTotalReservations();
+        this.id = s.getId();
+        this.movieName = s.getMovie().getMovieName();
+        this.date = s.getDate();
+        this.totalReservations = s.getTotalReservations();
     }
 }

@@ -1,28 +1,33 @@
 package dat3.kinoxp.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
 
-@NoArgsConstructor
 @Getter
 @Setter
+@AllArgsConstructor
+@Builder
+@NoArgsConstructor
+
 @Entity
 public class Reservation {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-    private Long showingId;
-    private int row;
-    private int number;
 
-    public Reservation(Long showingId, int row, int number) {
-        this.showingId = showingId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+    @Column(name = "phone_number")
+    private String phoneNumber;
+    @Column(name = "seat_row")
+    private int row;
+    @Column(name = "seat_number")
+    private int number;
+    @ManyToOne
+    private Showing showing;
+
+    public Reservation(String phoneNumber, int row, int number, Showing showing) {
+        this.phoneNumber = phoneNumber;
         this.row = row;
         this.number = number;
+        this.showing = showing;
     }
 }

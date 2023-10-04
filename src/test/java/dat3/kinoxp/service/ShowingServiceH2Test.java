@@ -2,8 +2,12 @@ package dat3.kinoxp.service;
 
 import dat3.kinoxp.dto.ShowingRequest;
 import dat3.kinoxp.dto.ShowingResponse;
+import dat3.kinoxp.entity.Movie;
 import dat3.kinoxp.entity.Showing;
+import dat3.kinoxp.entity.Theater;
+import dat3.kinoxp.repository.MovieRepository;
 import dat3.kinoxp.repository.ShowingRepository;
+import dat3.kinoxp.repository.TheaterRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +43,7 @@ class ShowingServiceH2Test {
         if (dataIsInitialized) return;
         showing1 = Showing.builder()
                 .time(LocalTime.of(16, 30))
-                .date(LocalDate.of(2023, 10, 3))
+                .date(LocalDate.of(2023, 10, 10))
                 .movie(movieRepository.save(new Movie("Mamma Mia", 16, "Musical")))
                 .theater(theaterRepository.save(new Theater(1, 200))).build();
         showing2 = Showing.builder()
@@ -64,7 +68,7 @@ class ShowingServiceH2Test {
 
     @Test
     void createShowingOverlappingThrow() {
-        ShowingRequest newShowing = new ShowingRequest(LocalDate.of(2023, 10, 3), LocalTime.of(16, 30), movieRepository.findById(1).get().getId(), theaterRepository.findById(1).get().getId());
+        ShowingRequest newShowing = new ShowingRequest(LocalDate.of(2023, 10, 10), LocalTime.of(16, 30), movieRepository.findById(1).get().getId(), theaterRepository.findById(1).get().getId());
         ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> service.createShowing(newShowing));
         assertEquals(HttpStatus.BAD_REQUEST, exception.getStatusCode());
         assertEquals("Time is overlapping another showing", exception.getReason());
@@ -72,7 +76,7 @@ class ShowingServiceH2Test {
 
     @Test
     void createShowingValidTime() {
-        ShowingRequest newShowing = new ShowingRequest(LocalDate.of(2023, 10, 3), LocalTime.of(18, 30), movieRepository.findById(1).get().getId(), theaterRepository.findById(1).get().getId());
+        ShowingRequest newShowing = new ShowingRequest(LocalDate.of(2023, 10, 10), LocalTime.of(18, 30), movieRepository.findById(1).get().getId(), theaterRepository.findById(1).get().getId());
         ShowingResponse res = service.createShowing(newShowing);
         assertEquals("Mamma Mia", res.getMovie().getMovieName());
     }

@@ -2,7 +2,9 @@ package dat3.kinoxp.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import dat3.kinoxp.entity.Movie;
 import dat3.kinoxp.entity.Showing;
+import dat3.kinoxp.entity.Theater;
 import lombok.*;
 
 import java.time.LocalDate;

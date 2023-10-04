@@ -19,17 +19,11 @@ public class MovieResponse {
     private String movieName;
     private int ageRestriction;
     private String category;
-    private LocalDateTime created;
-
-    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss", shape = JsonFormat.Shape.STRING)
-    private LocalDateTime edited;
 
     public MovieResponse(Movie movie) {
         this.id = movie.getId();
         this.movieName = movie.getMovieName();
         this.ageRestriction = movie.getAgeRestriction();
         this.category = movie.getCategory();
-        this.created = movie.getCreated();
-        this.edited = movie.getEdited();
     }
 }

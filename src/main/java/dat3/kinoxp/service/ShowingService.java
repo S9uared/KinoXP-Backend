@@ -2,8 +2,12 @@ package dat3.kinoxp.service;
 
 import dat3.kinoxp.dto.ShowingRequest;
 import dat3.kinoxp.dto.ShowingResponse;
+import dat3.kinoxp.entity.Movie;
 import dat3.kinoxp.entity.Showing;
+import dat3.kinoxp.entity.Theater;
+import dat3.kinoxp.repository.MovieRepository;
 import dat3.kinoxp.repository.ShowingRepository;
+import dat3.kinoxp.repository.TheaterRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -58,8 +62,8 @@ public class ShowingService {
 
     public ShowingResponse editShowing(ShowingRequest body, int showingId){
         Showing showing = getShowingById(showingId);
-        Movie movie = movieRepository.findById(body.getMovieId());
-        Theater theater = theaterRepository.findById(body.getTheaterId());
+        Movie movie = movieRepository.findById(body.getMovieId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Movie with this id does not exist"));
+        Theater theater = theaterRepository.findById(body.getTheaterId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Theater with this id does not exist"));
         showing.setDate(body.getDate());
         showing.setTime(body.getTime());
         showing.setMovie(movie);

@@ -1,12 +1,15 @@
 package dat3.kinoxp.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@Builder //We will talk about this in the class
 @NoArgsConstructor
 @Entity
 public class Theater {
@@ -17,9 +20,7 @@ public class Theater {
     @Column(name="size", nullable = false)
     private int size;
 
-    //Implement after merge with showing
-    /*
-    @OneToMany(mappedBy = "car", cascade = CascadeType.PERSIST, fetch=FetchType.LAZY)
+    @OneToMany(mappedBy = "theater", cascade = CascadeType.PERSIST, fetch=FetchType.LAZY)
     List<Showing> showings;
 
     public void addShowing(Showing showing){
@@ -28,7 +29,6 @@ public class Theater {
         }
         showings.add(showing);
     }
-    */
 
     public Theater(int id, int size) {
         this.id = id;
