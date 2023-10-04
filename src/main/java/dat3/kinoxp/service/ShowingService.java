@@ -50,4 +50,31 @@ public class ShowingService {
         List<Showing> showings = showingRepository.getShowingsByDate(date);
         return showings.stream().map(showing -> new ShowingResponse(showing)).toList();
     }
+
+    public ShowingResponse findById(int showingId){
+        Showing showing = getShowingById(showingId);
+        return new ShowingResponse(showing);
+    }
+
+    public ShowingResponse editShowing(ShowingRequest body, int showingId){
+        Showing showing = getShowingById(showingId);
+        Movie movie = movieRepository.findById(body.getMovieId());
+        Theater theater = theaterRepository.findById(body.getTheaterId());
+        showing.setDate(body.getDate());
+        showing.setTime(body.getTime());
+        showing.setMovie(movie);
+        showing.setTheater(theater);
+        Showing saved = showingRepository.save(showing);
+        return new ShowingResponse(saved);
+    }
+
+    private Showing getShowingById(int showingId){
+        return showingRepository.findById(showingId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Showing with this id does not exist"));
+    }
+
+    public void deleteShowingById(int showingId){
+        Showing showing = getShowingById(showingId);
+        showingRepository.delete(showing);
+    }
 }
