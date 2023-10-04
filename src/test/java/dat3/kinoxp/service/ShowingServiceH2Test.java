@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.http.HttpStatus;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
@@ -21,6 +22,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @DataJpaTest
 class ShowingServiceH2Test {
 
@@ -90,7 +92,7 @@ class ShowingServiceH2Test {
     void createShowingValidTime() {
         ShowingRequest newShowing = new ShowingRequest(LocalDate.now().plusDays(2), LocalTime.of(18, 30), movie1.getId(), 1);
         ShowingResponse res = service.createShowing(newShowing);
-        assertEquals(5, res.getMovieId());
+        assertEquals(1, res.getMovieId());
     }
 
     @Test
@@ -103,6 +105,6 @@ class ShowingServiceH2Test {
     void getShowingsByDate() {
         List<ShowingResponse> responses = service.getShowingsByDate(LocalDate.now().plusDays(1));
         assertEquals(1, responses.size());
-        assertEquals(4, responses.get(0).getMovieId());
+        assertEquals(2, responses.get(0).getMovieId());
     }
 }
