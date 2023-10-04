@@ -37,6 +37,7 @@ public class ShowingController {
 
     @GetMapping(path = "/{id}")
     ShowingResponse getShowingById(@PathVariable int id){
+
         return showingService.findById(id);
     }
 
