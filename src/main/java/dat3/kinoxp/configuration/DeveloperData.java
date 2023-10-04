@@ -1,5 +1,8 @@
 package dat3.kinoxp.configuration;
 
+import dat3.kinoxp.entity.Theater;
+import dat3.kinoxp.repository.MovieRepository;
+import dat3.kinoxp.repository.TheaterRepository;
 import dat3.security.entity.Role;
 import dat3.security.entity.UserWithRoles;
 import org.springframework.boot.ApplicationArguments;
@@ -9,21 +12,30 @@ import org.springframework.stereotype.Controller;
 import dat3.security.repository.UserWithRolesRepository;
 
 @Controller
-public class SetupDevUsers implements ApplicationRunner {
+public class DeveloperData implements ApplicationRunner {
 
+    TheaterRepository theaterRepository;
+    MovieRepository movieRepository;
     UserWithRolesRepository userWithRolesRepository;
     PasswordEncoder passwordEncoder;
     String passwordUsedByAll;
 
-    public SetupDevUsers(UserWithRolesRepository userWithRolesRepository, PasswordEncoder passwordEncoder) {
+    public DeveloperData(UserWithRolesRepository userWithRolesRepository, PasswordEncoder passwordEncoder, MovieRepository movieRepository, TheaterRepository theaterRepository) {
         this.userWithRolesRepository = userWithRolesRepository;
         this.passwordEncoder = passwordEncoder;
         passwordUsedByAll = "test12";
+        this.theaterRepository = theaterRepository;
+        this.movieRepository = movieRepository;
     }
 
     @Override
     public void run(ApplicationArguments args) {
         setupUserWithRoleUsers();
+        Theater theater1 = new Theater(1, 240);
+        Theater theater2 = new Theater(2, 400);
+        theaterRepository.save(theater1);
+        theaterRepository.save(theater2);
+        movieRepository.saveAll(MovieTestDataFactory.generateTestMovies());
     }
 
      /*****************************************************************************************

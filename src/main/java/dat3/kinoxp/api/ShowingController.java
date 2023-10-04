@@ -5,6 +5,7 @@ import dat3.kinoxp.dto.ShowingResponse;
 import dat3.kinoxp.entity.Showing;
 import dat3.kinoxp.service.ShowingService;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -19,7 +20,7 @@ public class ShowingController {
         this.showingService = showingService;
     }
 
-    @PostMapping
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     ShowingResponse addShowing(@RequestParam ShowingRequest body){
         return showingService.createShowing(body);
     }
