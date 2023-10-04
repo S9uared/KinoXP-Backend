@@ -2,17 +2,14 @@ package dat3.kinoxp.service;
 
 import dat3.kinoxp.dto.StatisticRequest;
 import dat3.kinoxp.dto.StatisticResponse;
-import dat3.kinoxp.entity.Movie;
-import dat3.kinoxp.entity.Statistic;
-import dat3.kinoxp.repository.MovieRepository;
-import dat3.kinoxp.repository.StatisticRepository;
+import dat3.kinoxp.entity.*;
+import dat3.kinoxp.repository.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -20,10 +17,16 @@ public class StatisticService {
 
     StatisticRepository statisticRepository;
     MovieRepository movieRepository;
+    TheaterRepository theaterRepository;
+    ShowingRepository showingRepository;
+    ReservationRepository reservationRepository;
 
-    public StatisticService(StatisticRepository statisticRepository, MovieRepository movieRepository) {
+    public StatisticService(StatisticRepository statisticRepository, MovieRepository movieRepository, TheaterRepository theaterRepository, ShowingRepository showingRepository, ReservationRepository reservationRepository) {
         this.statisticRepository = statisticRepository;
         this.movieRepository = movieRepository;
+        this.theaterRepository = theaterRepository;
+        this.showingRepository = showingRepository;
+        this.reservationRepository = reservationRepository;
     }
 
     public List<StatisticResponse> getStatistics(){
@@ -48,7 +51,7 @@ public class StatisticService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Date in the future is not allowed. Choose a current or previous date for this statistic");
         }
         Movie movie = movieRepository.findById(body.getMovieId()).orElseThrow(
-                   () -> new ResponseStatusException(HttpStatus.NOT_FOUND,"No member with this id found"));;
+                   () -> new ResponseStatusException(HttpStatus.NOT_FOUND,"No member with this id found"));
 
         int totalReservations = calculateStatisticForMovie(body.getMovieId(), body.getDate());
         Statistic newStat = statisticRepository.save(new Statistic(movie, body.getDate(), totalReservations));
@@ -56,20 +59,29 @@ public class StatisticService {
     }
 
     private int calculateStatisticForMovie(int movieId, LocalDate date){
-        double result = 100;
-        int reservations = 0;
-        //List contains last 7 days from given date.
+        double result = 0;
+        List<Reservation> reservations;
+        Theater theater;
+
+        //Only counts when a showing is found on a specific date. So if a movie only has showing on 3 showings in last week.
+        // The average is calculated based on that. The total reservations all added, is divided by this number.
+        int showingCounter = 0;
+
+        Movie movie = movieRepository.findById(movieId).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND,"No member with this id found"));
+        List<Showing> showingList = showingRepository.getShowingsByMovieId(movie.getId());
         LocalDate currentDate;
-        List<Integer> showingList = new ArrayList<>();
         for(int i = 0; i < 7; i++){
             currentDate = date.minusDays(i);
-            //showingList = getShowingsByMovieIdAndDate(movieId, currentDate);
-            for(Integer num : showingList){
-                //reservations = getReservationCountByShowingId(num); Do this, or get a list and get .size() on the list instead.
-
-                result += reservations;
+            for(int j = 0; j < showingList.size(); j++){
+                theater = theaterRepository.findById(showingList.get(j).getTheater().getId()).orElseThrow(
+                        () -> new ResponseStatusException(HttpStatus.NOT_FOUND,"No Theater with this id found"));
+                if(showingList.get(j).getDate().isEqual(currentDate)){
+                    showingCounter++;
+                    reservations = reservationRepository.findByShowingId(showingList.get(j).getId());
+                    result += (double) reservations.size()/theater.getSize();
+                }
             }
-
         }
         //Get list of all showings matching movieId and all dates in the list.
         //For each showing use method like get reservationsByShowingId from reservationRepo in a loop. And get size
@@ -77,8 +89,9 @@ public class StatisticService {
         //In every iteration of loop take theaterId from showing and get Theater size too. Calculate % by
         // dividing reservations with theatersize. Add them all together and divide by 7 at the end.
 
-        result = result/7;
-        return (int) result * 100;
+        result = result/ showingCounter;
+        result = result * 100;
+        return (int) result;
     }
 
 
