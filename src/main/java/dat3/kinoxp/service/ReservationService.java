@@ -29,7 +29,7 @@ public class ReservationService {
         if(!showingRepository.existsById(body.getShowingId())){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Showing with that id does not exist");
         }
-        if(!reservationRepository.existsByShowingIdAndNumberAndRow(body.getShowingId(), body.getNumber(), body.getRow())){
+        if(reservationRepository.existsByShowingIdAndNumberAndRow(body.getShowingId(), body.getNumber(), body.getRow())){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Already reserved, buddy :)");
         }
         Showing showing = showingRepository.findById(body.getShowingId())

@@ -90,7 +90,7 @@ class ShowingServiceH2Test {
     void createShowingValidTime() {
         ShowingRequest newShowing = new ShowingRequest(LocalDate.now().plusDays(2), LocalTime.of(18, 30), movie1.getId(), 1);
         ShowingResponse res = service.createShowing(newShowing);
-        assertEquals("Mamma Mia", res.getMovie().getMovieName());
+        assertEquals(5, res.getMovieId());
     }
 
     @Test
@@ -103,6 +103,6 @@ class ShowingServiceH2Test {
     void getShowingsByDate() {
         List<ShowingResponse> responses = service.getShowingsByDate(LocalDate.now().plusDays(1));
         assertEquals(1, responses.size());
-        assertEquals("Inception", responses.get(0).getMovie().getMovieName());
+        assertEquals(4, responses.get(0).getMovieId());
     }
 }

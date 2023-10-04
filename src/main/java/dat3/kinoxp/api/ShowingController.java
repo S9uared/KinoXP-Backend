@@ -21,7 +21,7 @@ public class ShowingController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    ShowingResponse addShowing(@RequestParam ShowingRequest body){
+    ShowingResponse addShowing(@RequestBody ShowingRequest body){
         return showingService.createShowing(body);
     }
 
@@ -31,14 +31,13 @@ public class ShowingController {
     }
 
     // I don't think this is correct
-    @GetMapping(path = "/{date}")
+    @GetMapping(path = "/date/{date}")
     List<ShowingResponse> getShowingsByDate(@PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) throws Exception{
         return showingService.getShowingsByDate(date);
     }
 
     @GetMapping(path = "/{id}")
     ShowingResponse getShowingById(@PathVariable int id){
-
         return showingService.findById(id);
     }
 

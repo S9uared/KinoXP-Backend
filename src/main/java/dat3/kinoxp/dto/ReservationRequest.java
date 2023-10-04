@@ -11,7 +11,7 @@ import lombok.*;
 @Builder
 
 public class ReservationRequest {
-    private int id;
+    //private int id;
     private String phoneNumber;
     private int row;
     private int number;
