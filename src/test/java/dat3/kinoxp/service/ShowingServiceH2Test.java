@@ -35,21 +35,28 @@ class ShowingServiceH2Test {
 
     private Showing showing1;
     private Showing showing2;
+    private Movie movie1;
+    private Movie movie2;
 
     boolean dataIsInitialized = false;
 
     @BeforeEach
     void setUp(){
         if (dataIsInitialized) return;
+        movie1 = new Movie("Mamma Mia", 16, "Musical");
+        movieRepository.save(movie1);
+        movie2 = new Movie("Inception", 16, "Musical");
+        movieRepository.save(movie2);
+
         showing1 = Showing.builder()
                 .time(LocalTime.of(16, 30))
-                .date(LocalDate.of(2023, 10, 10))
-                .movie(movieRepository.save(new Movie("Mamma Mia", 16, "Musical")))
+                .date(LocalDate.now().plusDays(2))
+                .movie(movie1)
                 .theater(theaterRepository.save(new Theater(1, 200))).build();
         showing2 = Showing.builder()
                 .time(LocalTime.of(14, 30))
-                .date(LocalDate.of(2023, 10, 6))
-                .movie(movieRepository.save(new Movie("Inception", 16, "Musical")))
+                .date(LocalDate.now().plusDays(1))
+                .movie(movie2)
                 .theater(theaterRepository.save(new Theater(2, 400))).build();
         showingRepository.saveAndFlush(showing1);
         showingRepository.saveAndFlush(showing2);
@@ -57,10 +64,15 @@ class ShowingServiceH2Test {
 
         dataIsInitialized = true;
     }
-
     @Test
     void createShowingInPastThrow() {
-        ShowingRequest newShowing = new ShowingRequest(LocalDate.of(2023, 9, 5), LocalTime.of(16, 30), movieRepository.findById(1).get().getId(), theaterRepository.findById(1).get().getId());
+        ShowingRequest newShowing = ShowingRequest.builder()
+                .date(LocalDate.now().minusDays(1))
+                .time(LocalTime.of(16, 30))
+                .movieId(1)
+                .theaterId(1).build();
+
+
         ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> service.createShowing(newShowing));
         assertEquals(HttpStatus.BAD_REQUEST, exception.getStatusCode());
         assertEquals("Date is in the past", exception.getReason());
@@ -68,7 +80,7 @@ class ShowingServiceH2Test {
 
     @Test
     void createShowingOverlappingThrow() {
-        ShowingRequest newShowing = new ShowingRequest(LocalDate.of(2023, 10, 10), LocalTime.of(16, 30), movieRepository.findById(1).get().getId(), theaterRepository.findById(1).get().getId());
+        ShowingRequest newShowing = new ShowingRequest(LocalDate.now().plusDays(2), LocalTime.of(16, 30), 1, 1);
         ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> service.createShowing(newShowing));
         assertEquals(HttpStatus.BAD_REQUEST, exception.getStatusCode());
         assertEquals("Time is overlapping another showing", exception.getReason());
@@ -76,7 +88,7 @@ class ShowingServiceH2Test {
 
     @Test
     void createShowingValidTime() {
-        ShowingRequest newShowing = new ShowingRequest(LocalDate.of(2023, 10, 10), LocalTime.of(18, 30), movieRepository.findById(1).get().getId(), theaterRepository.findById(1).get().getId());
+        ShowingRequest newShowing = new ShowingRequest(LocalDate.now().plusDays(2), LocalTime.of(18, 30), movie1.getId(), 1);
         ShowingResponse res = service.createShowing(newShowing);
         assertEquals("Mamma Mia", res.getMovie().getMovieName());
     }
@@ -89,7 +101,7 @@ class ShowingServiceH2Test {
 
     @Test
     void getShowingsByDate() {
-        List<ShowingResponse> responses = service.getShowingsByDate(LocalDate.of(2023, 10, 6));
+        List<ShowingResponse> responses = service.getShowingsByDate(LocalDate.now().plusDays(1));
         assertEquals(1, responses.size());
         assertEquals("Inception", responses.get(0).getMovie().getMovieName());
     }

@@ -7,12 +7,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.annotation.DirtiesContext;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @DataJpaTest
 class ShowingRepositoryTest {
 
@@ -66,7 +68,7 @@ class ShowingRepositoryTest {
     @Test
     public  void testGetByMovie(){
         assertEquals(1, showingRepository.getShowingsByMovieId(1).size());
-        assertEquals("Mamma Mia", showingRepository.getShowingsByMovieId(1).get(0).getMovie().getMovieName());
+        assertEquals("Mamma Mia", showingRepository.getShowingsByMovieId(showingOneId).get(0).getMovie().getMovieName());
     }
 
     @Test

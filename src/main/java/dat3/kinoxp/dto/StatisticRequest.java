@@ -16,6 +16,6 @@ public class StatisticRequest {
 
     private int movieId;
 
-    @JsonFormat(pattern = "yyyy-MM-dd",shape = JsonFormat.Shape.STRING)
+    @JsonFormat(pattern = "dd-mm-yyyy",shape = JsonFormat.Shape.STRING)
     private LocalDate date;
 }
