@@ -17,17 +17,15 @@ public class Reservation {
     private int id;
     @Column(name = "phone_number")
     private String phoneNumber;
-    @Column(name = "seat_row")
-    private int row;
-    @Column(name = "seat_number")
-    private int number;
+    @OneToOne
+    @JoinColumn
+    private SeatId seatId;
     @ManyToOne
     private Showing showing;
 
-    public Reservation(String phoneNumber, int row, int number, Showing showing) {
+    public Reservation(String phoneNumber, SeatId seatId, Showing showing) {
         this.phoneNumber = phoneNumber;
-        this.row = row;
-        this.number = number;
+        this.seatId = new SeatId;
         this.showing = showing;
     }
 }

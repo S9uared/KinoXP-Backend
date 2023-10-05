@@ -37,7 +37,7 @@ public class ReservationControllerTest {
 
         mockMvc.perform(post("/api/reservations/create")
                         .contentType("application/json")
-                        .content("{ \"showingId\": 1, \"row\": 2, \"number\": 3 }"))
+                        .content("{ \"showingId\": 1, \"seatId\": 2 }"))
                 .andExpect(status().isCreated());
     }
 
@@ -50,7 +50,7 @@ public class ReservationControllerTest {
 
         mockMvc.perform(put("/api/reservations/{reservationId}", reservationId)
                         .contentType("application/json")
-                        .content("{ \"showingId\": 1, \"row\": 2, \"number\": 3 }"))
+                        .content("{ \"showingId\": 1, \"seatId\": 2, }"))
                 .andExpect(status().isOk());
     }
 

@@ -28,13 +28,13 @@ public class ReservationService {
         if(!showingRepository.existsById(body.getShowingId())){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Showing with that id does not exist");
         }
-        if(reservationRepository.existsByShowingIdAndNumberAndRow(body.getShowingId(), body.getNumber(), body.getRow())){
+        if(reservationRepository.existsByShowingIdAndSeatId(body.getShowingId(), body.getSeatId())){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Already reserved, buddy :)");
         }
         Showing showing = showingRepository.findById(body.getShowingId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Showing with this id does not exist"));
 
-        Reservation reservation = reservationRepository.save(new Reservation(body.getPhoneNumber(), body.getRow(), body.getNumber(), showing));
+        Reservation reservation = reservationRepository.save(new Reservation(body.getPhoneNumber(), body.getSeatId(), showing));
         return new ReservationResponse(reservation);
     }
 
@@ -42,8 +42,7 @@ public class ReservationService {
         Reservation reservation = getReservationById(reservationId);
 
         reservation.setShowingId(body.getShowing());
-        reservation.setRow(body.getRow());
-        reservation.setNumber(body.getNumber());
+        reservation.setSeatId(body.getSeatId());
 
         reservation = reservationRepository.save(reservation);
         return new ReservationResponse(reservation);
