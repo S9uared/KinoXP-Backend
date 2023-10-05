@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class SeatService
-{
+public class SeatService {
+    //TODO
     SeatRepository seatRepository;
     TheaterRepository theaterRepository;
 
@@ -20,7 +20,7 @@ public class SeatService
         this.theaterRepository = theaterRepository;
     }
 
-    //TODO
+
     public List<SeatResponse> getSeatsByTheaterId(int id){
         List<Seat> seats = seatRepository.getSeatsByTheaterId(id);
         return seats.stream().map(seat -> new SeatResponse(seat)).toList();
