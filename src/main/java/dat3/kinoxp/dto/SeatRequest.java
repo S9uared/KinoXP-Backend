@@ -7,6 +7,8 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class SeatRequest
-{
+public class SeatRequest {
+    private int rowNumber;
+    private int seatNumber;
+    private String type;
 }

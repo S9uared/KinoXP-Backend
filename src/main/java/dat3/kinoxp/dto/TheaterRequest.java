@@ -9,4 +9,7 @@ import lombok.*;
 @Builder
 public class TheaterRequest
 {
+    private int id;
+    private int rows;
+    private int seatsPerRow;
 }
