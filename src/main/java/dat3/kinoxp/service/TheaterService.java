@@ -35,8 +35,8 @@ public class TheaterService {
         return new TheaterResponse(newTheater);
     }
     //EditTheater(body, id)
-    public TheaterResponse editTheater(TheaterRequest body){
-        Theater editTheater = getTheaterById(body.getId());
+    public TheaterResponse editTheater(TheaterRequest body, int id){
+        Theater editTheater = getTheaterById(id);
         editTheater.setRows(body.getRows());
         editTheater.setSeatsPerRow(body.getSeatsPerRow());
         editTheater = theaterRepository.save(editTheater);

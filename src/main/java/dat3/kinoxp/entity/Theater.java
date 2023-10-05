@@ -17,7 +17,7 @@ public class Theater {
     @Id
     private int id;
 
-    @Column(name="rows", nullable = false)
+    @Column(name="total_rows", nullable = false)
     private int rows;
     @Column(name="seats_per_row", nullable = false)
     private int seatsPerRow;

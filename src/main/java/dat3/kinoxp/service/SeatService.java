@@ -14,7 +14,7 @@ import java.util.List;
 
 @Service
 public class SeatService {
-    //TODO
+
     SeatRepository seatRepository;
     TheaterRepository theaterRepository;
 
@@ -26,6 +26,15 @@ public class SeatService {
 
     public List<SeatResponse> getSeatsByTheaterId(int id){
         List<Seat> seats = seatRepository.getSeatsByTheaterId(id);
+        return seats.stream().map(seat -> new SeatResponse(seat)).toList();
+    }
+
+    public SeatResponse getOneSeat(int id){
+        return new SeatResponse(getSeatById(id));
+    }
+
+    public List<SeatResponse> getSeatsByTheaterIdAndType(int id, String type){
+        List<Seat> seats = seatRepository.getSeatsByTheaterIdAndAndType(id, type);
         return seats.stream().map(seat -> new SeatResponse(seat)).toList();
     }
 

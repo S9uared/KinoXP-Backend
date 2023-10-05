@@ -18,16 +18,16 @@ public class Seat
     @ManyToOne
     Theater theater;
 
-    @Column(name="row_number", nullable=false)
+    @Column(name="row_id", nullable=false)//Row number is a reserved word in mysql
     private int rowNumber;
 
-    @Column(name="seat_number", nullable=false)
+    @Column(name="seat_id", nullable=false)
     private int seatNumber;
 
-    @Column(name="status", nullable=false)
+    @Column(name="status")
     private String status;
 
-    @Column(name="type", nullable = false)
+    @Column(name="type")
     private String type;
 
 
