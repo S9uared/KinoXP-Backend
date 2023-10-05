@@ -51,8 +51,8 @@ class StatisticServiceTest {
     @BeforeEach
     void setUp() {
         date = LocalDate.now();
-        t1 = new Theater(1, 100);
-        t2 = new Theater(2, 75);
+        t1 = new Theater(1, 10, 10);
+        t2 = new Theater(2, 15, 5);
         theaterRepository.save(t1);
         theaterRepository.save(t2);
         m1 = movieRepository.save(new Movie("James Bond", 13, "Action"));

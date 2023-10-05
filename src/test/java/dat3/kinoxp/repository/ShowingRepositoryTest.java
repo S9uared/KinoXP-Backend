@@ -34,14 +34,14 @@ class ShowingRepositoryTest {
         if(!dataInitialized){
             Movie movie1 = new Movie("Mamma Mia", 12, "Musical");
             movieRepository.save(movie1);
-            Theater theater1 = new Theater(1, 400);
+            Theater theater1 = new Theater(1, 25, 16);
             theaterRepository.save(theater1);
             Showing showing1 = showingRepository.save(new Showing(LocalDate.now(), LocalTime.of(16, 30), movie1, theater1));
             showingOneId = showing1.getId();
 
             Movie movie2 = new Movie("Inception", 16, "Thriller");
             movieRepository.save(movie2);
-            Theater theater2 = new Theater(2, 200);
+            Theater theater2 = new Theater(2, 20, 10);
             theaterRepository.save(theater2);
             Showing showing2 = showingRepository.save(new Showing(LocalDate.of(2023, 12, 01), LocalTime.of(12, 45), movie2, theater2));
             showingTwoId = showing2.getId();
