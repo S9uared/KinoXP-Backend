@@ -2,8 +2,6 @@ package dat3.kinoxp.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,8 +27,11 @@ public class Movie {
     @Column(name = "category")
     private String category;
 
-    @OneToMany(mappedBy = "movie", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     List<Showing> showings;
+
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    List<Statistic> statistics;
 
     public Movie(String movieName, int ageRestriction, String category) {
         this.movieName = movieName;
@@ -43,5 +44,12 @@ public class Movie {
             showings = new ArrayList<>();
         }
         showings.add(showing);
+    }
+
+    public void addStatistic(Statistic statistic){
+        if(statistics == null){
+            statistics = new ArrayList<>();
+        }
+        statistics.add(statistic);
     }
 }

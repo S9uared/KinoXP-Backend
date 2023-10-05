@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ReservationService {
@@ -70,12 +69,13 @@ public class ReservationService {
     public List<Reservation> getReservationsForMovie(int movieId) {
         List<Showing> showings = showingRepository.getShowingsByMovieId(movieId);
         return showings.stream().map(showing -> {
-            return reservationRepository.findByShowingId(showing.getId());
+            return reservationRepository.findAllByShowingId(showing.getId());
         }).toList().stream().flatMap(List::stream).toList();
     }
 
-    public List<Reservation> viewReservationsForShowing(int showingId) {
-        return reservationRepository.findByShowingId(showingId);
+    public List<ReservationResponse> viewReservationsForShowing(int showingId) {
+        List<Reservation> reservations = reservationRepository.findAllByShowingId(showingId);
+        return reservations.stream().map(reservation -> new ReservationResponse(reservation)).toList();
     }
 
     private Reservation getReservationById(int reservationId){

@@ -30,7 +30,6 @@ public class ShowingController {
         return showingService.getShowings();
     }
 
-    // I don't think this is correct
     @GetMapping(path = "/date/{date}")
     List<ShowingResponse> getShowingsByDate(@PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) throws Exception{
         return showingService.getShowingsByDate(date);

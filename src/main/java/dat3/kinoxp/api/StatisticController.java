@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin
-@RequestMapping("api/statistics")
+@RequestMapping("/api/statistics")
 public class StatisticController {
     StatisticService statisticService;
 

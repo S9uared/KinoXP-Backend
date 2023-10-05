@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -27,23 +28,36 @@ public class ShowingService {
         this.theaterRepository = theaterRepository;
     }
 
-    public ShowingResponse createShowing(ShowingRequest body){
-        if (body.getDate().isBefore(LocalDate.now())){
+    public ShowingResponse createShowing(ShowingRequest body) {
+        if (body.getDate().isBefore(LocalDate.now())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Date is in the past");
         }
+
+        LocalDateTime showingStartTime = body.getDate().atTime(body.getTime());
+        LocalDateTime showingEndTime = showingStartTime.plusHours(2).minusMinutes(1);
+
         List<Showing> showingsOnDate = showingRepository.getShowingsByDate(body.getDate());
-        for (Showing s: showingsOnDate){
-            if (!body.getTime().plusHours(2).minusMinutes(1).isAfter(s.getTime()) || !body.getTime().isAfter(s.getTime().plusHours(2).minusMinutes(1))){
+
+        // Check for overlap with existing showings
+        for (Showing s : showingsOnDate) {
+            LocalDateTime existingStartTime = s.getDate().atTime(s.getTime());
+            LocalDateTime existingEndTime = existingStartTime.plusHours(2).minusMinutes(1);
+
+            if (!(showingEndTime.isBefore(existingStartTime) || showingStartTime.isAfter(existingEndTime))) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Time is overlapping another showing");
             }
         }
+
         Movie movie = movieRepository.findById(body.getMovieId()).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.NOT_FOUND,"No movie with this id found"));
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No movie with this id found"));
         Theater theater = theaterRepository.findById(body.getTheaterId()).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.NOT_FOUND,"No theater with this id found"));
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No theater with this id found"));
+
+        // If no overlap is found, create the showing
         Showing showing = showingRepository.save(new Showing(body.getDate(), body.getTime(), movie, theater));
         return new ShowingResponse(showing);
     }
+
 
     public List<ShowingResponse> getShowings(){
         List<Showing> showings = showingRepository.findAll();

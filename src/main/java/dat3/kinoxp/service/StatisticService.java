@@ -74,11 +74,11 @@ public class StatisticService {
         for(int i = 0; i < 7; i++){
             currentDate = date.minusDays(i);
             for(int j = 0; j < showingList.size(); j++){
-                theater = theaterRepository.findById(showingList.get(j).getTheater().getId()).orElseThrow(
-                        () -> new ResponseStatusException(HttpStatus.NOT_FOUND,"No Theater with this id found"));
                 if(showingList.get(j).getDate().isEqual(currentDate)){
                     showingCounter++;
-                    reservations = reservationRepository.findByShowingId(showingList.get(j).getId());
+                    theater = theaterRepository.findById(showingList.get(j).getTheater().getId()).orElseThrow(
+                            () -> new ResponseStatusException(HttpStatus.NOT_FOUND,"No Theater with this id found"));
+                    reservations = reservationRepository.findAllByShowingId(showingList.get(j).getId());
                     result += (double) reservations.size()/theater.getSize();
                 }
             }

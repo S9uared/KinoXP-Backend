@@ -90,7 +90,7 @@ class ShowingServiceH2Test {
 
     @Test
     void createShowingValidTime() {
-        ShowingRequest newShowing = new ShowingRequest(LocalDate.now().plusDays(2), LocalTime.of(18, 30), movie1.getId(), 1);
+        ShowingRequest newShowing = new ShowingRequest(LocalDate.now().plusDays(2), LocalTime.of(14, 30), movie1.getId(), 1);
         ShowingResponse res = service.createShowing(newShowing);
         assertEquals(1, res.getMovieId());
     }

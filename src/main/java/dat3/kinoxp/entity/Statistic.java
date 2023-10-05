@@ -31,5 +31,6 @@ public class Statistic{
         this.movie = movie;
         this.date = date;
         this.totalReservations = totalReservations;
+        movie.addStatistic(this);
     }
 }
