@@ -16,15 +16,21 @@ import org.springframework.web.server.ResponseStatusException;
 public class MovieService {
 
     MovieRepository movieRepository;
-
-    @Autowired
-    AzureTranslate translator;
-
-    @Autowired
+    //AzureTranslate translator;
     OmdbFacade omdbFacade;
 
-    public MovieService(MovieRepository movieRepository) {
+    /*
+    public MovieService(MovieRepository movieRepository, AzureTranslate translator, OmdbFacade omdbFacade) {
+
         this.movieRepository = movieRepository;
+        this.translator = translator;
+        this.omdbFacade = omdbFacade;
+    }
+    */
+
+    public MovieService(MovieRepository movieRepository, OmdbFacade omdbFacade) {
+        this.movieRepository = movieRepository;
+        this.omdbFacade = omdbFacade;
     }
 
     public Movie getMovieByImdbId(String imdbId) {

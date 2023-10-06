@@ -67,6 +67,13 @@ public class Movie {
         }
         statistics.add(statistic);
     }
+
+    public Movie(String title, String rated, String runtime, String genre) {
+        this.title = title;
+        this.rated = rated;
+        this.runtime = runtime;
+        this.genre = genre;
+    }
 }
     /*
     @Column(name = "movie_name")
