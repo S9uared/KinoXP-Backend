@@ -26,7 +26,7 @@ public class Reservation {
 
     public Reservation(String phoneNumber, Seat seat, Showing showing) {
         this.phoneNumber = phoneNumber;
-        this.seat = Seat;
+        this.seat = seat;
         this.showing = showing;
     }
 }
