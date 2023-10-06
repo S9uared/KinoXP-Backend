@@ -44,14 +44,14 @@ public class ShowingService {
         }
 
         LocalDateTime showingStartTime = body.getDate().atTime(body.getTime());
-        LocalDateTime showingEndTime = showingStartTime.plusHours(parseHoursAndMinutes(body.getRuntime())[0]).plusMinutes(parseHoursAndMinutes(body.getRuntime())[1]).minusMinutes(1);
+        LocalDateTime showingEndTime = showingStartTime.plusMinutes(parseRuntime(movie.getRuntime())).minusMinutes(1);
 
         List<Showing> showingsOnDate = showingRepository.getShowingsByDate(body.getDate());
 
         // Check for overlap with existing showings
         for (Showing s : showingsOnDate) {
             LocalDateTime existingStartTime = s.getDate().atTime(s.getTime());
-            LocalDateTime existingEndTime = existingStartTime.plusHours(parseHoursAndMinutes(s.getMovie().getRuntime())[0]).plusMinutes(parseHoursAndMinutes(s.getMovie().getRuntime())[1]).minusMinutes(1);
+            LocalDateTime existingEndTime = existingStartTime.plusMinutes(parseRuntime(s.getMovie().getRuntime())).minusMinutes(1);
 
             if (!(showingEndTime.isBefore(existingStartTime) || showingStartTime.isAfter(existingEndTime))) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Time is overlapping another showing");
@@ -114,26 +114,23 @@ public class ShowingService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Showing with this id does not exist"));
     }
 
-    private int[] parseHoursAndMinutes(String input) {
-        int hours = 0;
+    private int parseRuntime(String input) {
         int minutes = 0;
 
         // Define a regular expression pattern to match hours and minutes
-        Pattern pattern = Pattern.compile("(\\d+) hour (\\d+) minutes");
+        Pattern pattern = Pattern.compile("(\\d+) min");
         Matcher matcher = pattern.matcher(input);
 
         // Check if the pattern matches
         if (matcher.find()) {
             // Extract hours and minutes as strings
-            String hoursStr = matcher.group(1);
-            String minutesStr = matcher.group(2);
+            String minutesStr = matcher.group(1);
 
             // Convert the extracted strings to integers
-            hours = Integer.parseInt(hoursStr);
             minutes = Integer.parseInt(minutesStr);
         }
 
-        return new int[]{hours, minutes};
+        return minutes;
     }
 
 }

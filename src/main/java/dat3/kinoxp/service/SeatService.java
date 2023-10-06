@@ -64,9 +64,10 @@ public class SeatService {
     }
 
     public void deleteSeatById(int seatId){
-        /*if(reservationRepository.existsBySeatId){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Can not delete seats with active reservations.");}
-        */
+        if(reservationRepository.existsBySeatId(seatId)){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Can not delete seats with active reservations.");
+        }
+
         Seat seat = getSeatById(seatId);
         seatRepository.delete(seat);
     }
