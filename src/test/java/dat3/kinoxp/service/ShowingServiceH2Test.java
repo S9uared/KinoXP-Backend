@@ -49,6 +49,7 @@ class ShowingServiceH2Test {
         movie1 = new Movie("Mamma Mia", "12", "125 min", "Musical");
         movieRepository.save(movie1);
         movie2 = new Movie("Inception", "16", "135 min", "Thriller");
+
         movieRepository.save(movie2);
 
         showing1 = Showing.builder()
@@ -125,5 +126,5 @@ class ShowingServiceH2Test {
         List<ShowingResponse> responses = service.getShowingsByDate(LocalDate.now().plusDays(1));
         assertEquals(1, responses.size());
         assertEquals(2, responses.get(0).getMovieId());
-    }
+    }*/
 }

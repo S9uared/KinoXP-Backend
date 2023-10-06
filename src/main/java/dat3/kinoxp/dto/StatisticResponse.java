@@ -25,7 +25,7 @@ public class StatisticResponse {
 
     public StatisticResponse(Statistic s){
         this.id = s.getId();
-        this.movieName = s.getMovie().getMovieName();
+        this.movieName = s.getMovie().getTitle();
         this.date = s.getDate();
         this.totalReservations = s.getTotalReservations();
     }

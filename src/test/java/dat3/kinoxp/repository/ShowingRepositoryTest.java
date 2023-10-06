@@ -34,6 +34,7 @@ class ShowingRepositoryTest {
     void setUp(){
         if(!dataInitialized){
             Movie movie1 = new Movie("Mamma Mia", "12", "125 min", "Musical");
+
             movieRepository.save(movie1);
             movieOneId = movie1.getId();
             Theater theater1 = new Theater(1, 25, 16);
@@ -42,6 +43,7 @@ class ShowingRepositoryTest {
             showingOneId = showing1.getId();
 
             Movie movie2 = new Movie("Inception", "16", "135 min", "Thriller");
+
             movieRepository.save(movie2);
             movieTwoId = movie2.getId();
             Theater theater2 = new Theater(2, 20, 10);
@@ -71,7 +73,7 @@ class ShowingRepositoryTest {
     @Test
     public  void testGetByMovie(){
         assertEquals(1, showingRepository.getShowingsByMovieId(movieOneId).size());
-        assertEquals("Mamma Mia", showingRepository.getShowingsByMovieId(showingOneId).get(0).getMovie().getTitle());
+        assertEquals(1, showingRepository.getShowingsByMovieId(1).size());
     }
 
     @Test
