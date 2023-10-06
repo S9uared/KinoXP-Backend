@@ -15,14 +15,12 @@ public class ReservationResponse {
     private int id;
     private int showingId;
     private String phoneNumber;
-    private int row;
-    private int number;
+    private int seatId;
 
     public ReservationResponse(Reservation reservation) {
         this.id = reservation.getId();
         this.showingId = reservation.getShowing().getId();
         this.phoneNumber = reservation.getPhoneNumber();
-        this.row = reservation.getRow();
-        this.number = reservation.getNumber();
+        this.seatId = reservation.getSeatId().getId();
     }
 }

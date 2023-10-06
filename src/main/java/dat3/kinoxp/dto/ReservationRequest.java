@@ -13,7 +13,6 @@ import lombok.*;
 public class ReservationRequest {
     //private int id;
     private String phoneNumber;
-    private int row;
-    private int number;
+    private int seatId;
     private int showingId;
 }
