@@ -1,7 +1,6 @@
 package dat3.kinoxp.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import dat3.kinoxp.entity.Showing;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -13,10 +12,12 @@ import java.time.LocalTime;
 @AllArgsConstructor
 @Builder
 public class ShowingRequest {
-    @JsonFormat(pattern = "yyyy-MM-dd", shape = JsonFormat.Shape.STRING)
+    @JsonFormat(pattern = "dd-MM-yyyy", shape = JsonFormat.Shape.STRING)
     private LocalDate date;
     @JsonFormat(pattern = "HH:mm", shape = JsonFormat.Shape.STRING)
     private LocalTime time;
+    private int timeAfterShowing;
+    private int premiere;
     private int movieId;
     private int theaterId;
 }

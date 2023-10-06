@@ -62,6 +62,7 @@ public class StatisticService {
         double result = 0;
         List<Reservation> reservations;
         Theater theater;
+        int theaterSeats;
 
         //Only counts when a showing is found on a specific date. So if a movie only has showing on 3 showings in last week.
         // The average is calculated based on that. The total reservations all added, is divided by this number.
@@ -78,8 +79,9 @@ public class StatisticService {
                     showingCounter++;
                     theater = theaterRepository.findById(showingList.get(j).getTheater().getId()).orElseThrow(
                             () -> new ResponseStatusException(HttpStatus.NOT_FOUND,"No Theater with this id found"));
+                    theaterSeats = theater.getRows()*theater.getSeatsPerRow();
                     reservations = reservationRepository.findAllByShowingId(showingList.get(j).getId());
-                    result += (double) reservations.size()/theater.getSize();
+                    result += (double) reservations.size()/theaterSeats;
                 }
             }
         }

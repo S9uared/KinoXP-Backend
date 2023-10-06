@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor//Has this constructor for @requestbody
+@AllArgsConstructor
 @Builder
 public class StatisticRequest {
 

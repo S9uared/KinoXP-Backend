@@ -31,8 +31,8 @@ public class DeveloperData implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) {
         setupUserWithRoleUsers();
-        Theater theater1 = new Theater(1, 240);
-        Theater theater2 = new Theater(2, 400);
+        Theater theater1 = new Theater(1, 25, 16);
+        Theater theater2 = new Theater(2, 20, 12);
         theaterRepository.save(theater1);
         theaterRepository.save(theater2);
     }

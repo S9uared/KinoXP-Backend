@@ -10,7 +10,9 @@ import java.util.List;
 public interface ReservationRepository extends JpaRepository<Reservation, Integer> {
     List<Reservation> findAllByShowingId(int showingId);
 
-    boolean existsByShowingIdAndNumberAndRow(int showingId, int number, int row);
+    boolean existsByShowingIdAndSeatId(int showingId, int seatId);
 
     List<Reservation> getReservationsByPhoneNumber(String phoneNumber);
+
+    boolean existsBySeatId(int id);
 }

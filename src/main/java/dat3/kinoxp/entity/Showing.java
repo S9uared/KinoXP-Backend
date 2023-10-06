@@ -25,6 +25,9 @@ public class Showing {
     @Column(name = "time", nullable = false)
     private LocalTime time;
 
+    @Column(name = "type", nullable = false)
+    private ShowingType type;
+
     @ManyToOne
     private Movie movie;
 
@@ -34,9 +37,10 @@ public class Showing {
     @OneToMany(mappedBy = "showing")
     List<Reservation> reservations;
 
-    public Showing(LocalDate date, LocalTime time, Movie movie, Theater theater ){
+    public Showing(LocalDate date, LocalTime time, ShowingType type, Movie movie, Theater theater ){
         this.date = date;
         this.time = time;
+        this.type = type;
         this.movie = movie;
         this.theater = theater;
         movie.addShowing(this);
