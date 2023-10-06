@@ -3,9 +3,11 @@ package dat3.kinoxp.service;
 import dat3.kinoxp.dto.ReservationRequest;
 import dat3.kinoxp.dto.ReservationResponse;
 import dat3.kinoxp.entity.Reservation;
+import dat3.kinoxp.entity.Seat;
 import dat3.kinoxp.entity.Showing;
 import dat3.kinoxp.repository.ReservationRepository;
 import dat3.kinoxp.repository.ShowingRepository;
+import dat3.kinoxp.repository.SeatRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -17,10 +19,12 @@ public class ReservationService {
 
     private ReservationRepository reservationRepository;
     private ShowingRepository showingRepository;
+    private SeatRepository seatRepository;
 
-    public ReservationService(ReservationRepository reservationRepository, ShowingRepository showingRepository){
+    public ReservationService(ReservationRepository reservationRepository, ShowingRepository showingRepository, SeatRepository seatRepository){
         this.reservationRepository = reservationRepository;
         this.showingRepository = showingRepository;
+        this.seatRepository = seatRepository;
     }
 
     // Skal den tjekke at der ikke allerede eksistere en lignende reservation
@@ -34,7 +38,10 @@ public class ReservationService {
         Showing showing = showingRepository.findById(body.getShowingId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Showing with this id does not exist"));
 
-        Reservation reservation = reservationRepository.save(new Reservation(body.getPhoneNumber(), body.getSeatId(), showing));
+        Seat seat = seatRepository.findById(body.getSeatId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Seat with this id does not exist"));
+
+        Reservation reservation = reservationRepository.save(new Reservation(body.getPhoneNumber(), seat, showing));
         return new ReservationResponse(reservation);
     }
 
