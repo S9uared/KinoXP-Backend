@@ -54,12 +54,12 @@ class ShowingServiceH2Test {
                 .time(LocalTime.of(16, 30))
                 .date(LocalDate.now().plusDays(2))
                 .movie(movie1)
-                .theater(theaterRepository.save(new Theater(1, 200))).build();
+                .theater(theaterRepository.save(new Theater(1, 20, 10))).build();
         showing2 = Showing.builder()
                 .time(LocalTime.of(14, 30))
                 .date(LocalDate.now().plusDays(1))
                 .movie(movie2)
-                .theater(theaterRepository.save(new Theater(2, 400))).build();
+                .theater(theaterRepository.save(new Theater(2, 25, 16))).build();
         showingRepository.saveAndFlush(showing1);
         showingRepository.saveAndFlush(showing2);
         service = new ShowingService(showingRepository, movieRepository, theaterRepository);

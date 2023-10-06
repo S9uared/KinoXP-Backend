@@ -13,4 +13,5 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
     boolean existsByShowingIdAndNumberAndRow(int showingId, int number, int row);
 
     List<Reservation> getReservationsByPhoneNumber(String phoneNumber);
+    //boolean existsBySeatId(int id);
 }
