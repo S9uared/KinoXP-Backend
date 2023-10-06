@@ -42,7 +42,7 @@ public class ReservationService {
         Reservation reservation = getReservationById(reservationId);
 
         reservation.setShowingId(body.getShowing());
-        reservation.setSeatId(body.getSeatId());
+        reservation.setSeatId(body.getSeat());
 
         reservation = reservationRepository.save(reservation);
         return new ReservationResponse(reservation);

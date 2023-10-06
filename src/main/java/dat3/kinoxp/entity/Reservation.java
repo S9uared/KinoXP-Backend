@@ -2,6 +2,7 @@ package dat3.kinoxp.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.mapping.ToOne;
 
 @Getter
 @Setter
@@ -17,15 +18,15 @@ public class Reservation {
     private int id;
     @Column(name = "phone_number")
     private String phoneNumber;
-    @OneToOne
+    @ManyToOne
     @JoinColumn
-    private SeatId seatId;
+    private Seat seat;
     @ManyToOne
     private Showing showing;
 
-    public Reservation(String phoneNumber, SeatId seatId, Showing showing) {
+    public Reservation(String phoneNumber, Seat seat, Showing showing) {
         this.phoneNumber = phoneNumber;
-        this.seatId = new SeatId;
+        this.seat = new Seat;
         this.showing = showing;
     }
 }
