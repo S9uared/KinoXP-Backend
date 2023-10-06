@@ -4,4 +4,6 @@ import dat3.kinoxp.entity.CustomerInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CustomerInfoRepository extends JpaRepository<CustomerInfo, String> {
+   boolean existsByPhoneNumber(String number);
+   CustomerInfo findCustomerInfoByPhoneNumber(String number);
 }

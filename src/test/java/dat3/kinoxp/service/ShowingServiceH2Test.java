@@ -126,5 +126,5 @@ class ShowingServiceH2Test {
         List<ShowingResponse> responses = service.getShowingsByDate(LocalDate.now().plusDays(1));
         assertEquals(1, responses.size());
         assertEquals(2, responses.get(0).getMovieId());
-    }*/
+    }
 }

@@ -1,12 +1,10 @@
 package dat3.kinoxp.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import dat3.kinoxp.api_facade.AzureTranslate;
 import dat3.kinoxp.api_facade.OmdbFacade;
 import dat3.kinoxp.dto.MovieOmdbResponse;
 import dat3.kinoxp.entity.Movie;
 import dat3.kinoxp.repository.MovieRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
