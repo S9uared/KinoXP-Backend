@@ -2,6 +2,7 @@ package dat3.kinoxp.repository;
 
 import dat3.kinoxp.entity.Movie;
 import dat3.kinoxp.entity.Showing;
+import dat3.kinoxp.entity.ShowingType;
 import dat3.kinoxp.entity.Theater;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,23 +28,25 @@ class ShowingRepositoryTest {
 
 
     boolean dataInitialized = false;
-    int showingOneId, showingTwoId;
+    int showingOneId, showingTwoId, movieOneId, movieTwoId;
 
     @BeforeEach
     void setUp(){
         if(!dataInitialized){
-            Movie movie1 = new Movie("Mamma Mia", 12, "Musical");
+            Movie movie1 = new Movie("Mamma Mia", "12", "125 min", "Musical");
             movieRepository.save(movie1);
+            movieOneId = movie1.getId();
             Theater theater1 = new Theater(1, 25, 16);
             theaterRepository.save(theater1);
-            Showing showing1 = showingRepository.save(new Showing(LocalDate.now(), LocalTime.of(16, 30), movie1, theater1));
+            Showing showing1 = showingRepository.save(new Showing(LocalDate.now(), LocalTime.of(16, 30), ShowingType.EVENING, movie1, theater1));
             showingOneId = showing1.getId();
 
-            Movie movie2 = new Movie("Inception", 16, "Thriller");
+            Movie movie2 = new Movie("Inception", "16", "135 min", "Thriller");
             movieRepository.save(movie2);
+            movieTwoId = movie2.getId();
             Theater theater2 = new Theater(2, 20, 10);
             theaterRepository.save(theater2);
-            Showing showing2 = showingRepository.save(new Showing(LocalDate.of(2023, 12, 01), LocalTime.of(12, 45), movie2, theater2));
+            Showing showing2 = showingRepository.save(new Showing(LocalDate.now(), LocalTime.of(12, 45), ShowingType.MORNING, movie2, theater2));
             showingTwoId = showing2.getId();
         }
     }
@@ -52,7 +55,7 @@ class ShowingRepositoryTest {
     public void testFindById(){
         Showing showing = showingRepository.findById(showingOneId).get();
         assertEquals(LocalDate.now(), showing.getDate());
-        assertEquals("Mamma Mia", showing.getMovie().getMovieName());
+        assertEquals("Mamma Mia", showing.getMovie().getTitle());
     }
 
     @Test
@@ -62,18 +65,18 @@ class ShowingRepositoryTest {
 
     @Test
     public void testGetByDate(){
-        assertEquals(1, showingRepository.getShowingsByDate(LocalDate.now()).size());
+        assertEquals(2, showingRepository.getShowingsByDate(LocalDate.now()).size());
     }
 
     @Test
     public  void testGetByMovie(){
-        assertEquals(1, showingRepository.getShowingsByMovieId(1).size());
-        assertEquals("Mamma Mia", showingRepository.getShowingsByMovieId(showingOneId).get(0).getMovie().getMovieName());
+        assertEquals(1, showingRepository.getShowingsByMovieId(movieOneId).size());
+        assertEquals("Mamma Mia", showingRepository.getShowingsByMovieId(showingOneId).get(0).getMovie().getTitle());
     }
 
     @Test
-    public  void testGetByMovieCategory(){
-        assertEquals(1, showingRepository.getShowingsByMovieCategory("Thriller").size());
-        assertEquals("Musical", showingRepository.getShowingsByMovieId(1).get(0).getMovie().getCategory());
+    public  void testGetByMovieGenre(){
+        assertEquals(1, showingRepository.getShowingsByMovieGenre("Thriller").size());
+        assertEquals("Musical", showingRepository.getShowingsByMovieId(movieOneId).get(0).getMovie().getGenre());
     }
 }
