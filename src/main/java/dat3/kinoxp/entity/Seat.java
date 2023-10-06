@@ -3,6 +3,9 @@ package dat3.kinoxp.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -30,6 +33,15 @@ public class Seat
     @Column(name="type")
     private String type;
 
+    @OneToMany(mappedBy = "seat", cascade = CascadeType.PERSIST, fetch=FetchType.LAZY)
+    List<Reservation> reservations;
+
+    public void addReservation(Reservation reservation){
+        if(reservations == null){
+            reservations = new ArrayList<>();
+        }
+        reservations.add(reservation);
+    }
 
     public Seat(Theater theater, int rowNumber, int seatNumber, String status, String type)
     {

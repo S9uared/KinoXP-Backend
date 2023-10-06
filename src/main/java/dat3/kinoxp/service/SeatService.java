@@ -4,6 +4,7 @@ import dat3.kinoxp.dto.SeatRequest;
 import dat3.kinoxp.dto.SeatResponse;
 import dat3.kinoxp.entity.Seat;
 import dat3.kinoxp.entity.Theater;
+import dat3.kinoxp.repository.ReservationRepository;
 import dat3.kinoxp.repository.SeatRepository;
 import dat3.kinoxp.repository.TheaterRepository;
 import org.springframework.http.HttpStatus;
@@ -17,12 +18,14 @@ public class SeatService {
 
     SeatRepository seatRepository;
     TheaterRepository theaterRepository;
+    ReservationRepository reservationRepository;
 
-    public SeatService(SeatRepository seatRepository, TheaterRepository theaterRepository) {
+    public SeatService(SeatRepository seatRepository, TheaterRepository theaterRepository, ReservationRepository reservationRepository)
+    {
         this.seatRepository = seatRepository;
         this.theaterRepository = theaterRepository;
+        this.reservationRepository = reservationRepository;
     }
-
 
     public List<SeatResponse> getSeatsByTheaterId(int id){
         List<Seat> seats = seatRepository.getSeatsByTheaterId(id);
@@ -61,6 +64,9 @@ public class SeatService {
     }
 
     public void deleteSeatById(int seatId){
+        /*if(reservationRepository.existsBySeatId){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Can not delete seats with active reservations.");}
+        */
         Seat seat = getSeatById(seatId);
         seatRepository.delete(seat);
     }
