@@ -35,7 +35,6 @@ public class DeveloperData implements ApplicationRunner {
         Theater theater2 = new Theater(2, 20, 12);
         theaterRepository.save(theater1);
         theaterRepository.save(theater2);
-        movieRepository.saveAll(MovieTestDataFactory.generateTestMovies());
     }
 
      /*****************************************************************************************

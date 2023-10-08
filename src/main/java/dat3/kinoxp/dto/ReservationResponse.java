@@ -20,7 +20,6 @@ public class ReservationResponse {
     public ReservationResponse(Reservation reservation) {
         this.id = reservation.getId();
         this.showingId = reservation.getShowing().getId();
-        this.phoneNumber = reservation.getPhoneNumber();
-        this.seatId = reservation.getSeatId().getId();
+        this.seatId = reservation.getSeat().getId();
     }
 }

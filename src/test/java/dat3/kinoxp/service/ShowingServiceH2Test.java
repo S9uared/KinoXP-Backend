@@ -4,6 +4,7 @@ import dat3.kinoxp.dto.ShowingRequest;
 import dat3.kinoxp.dto.ShowingResponse;
 import dat3.kinoxp.entity.Movie;
 import dat3.kinoxp.entity.Showing;
+import dat3.kinoxp.entity.ShowingType;
 import dat3.kinoxp.entity.Theater;
 import dat3.kinoxp.repository.MovieRepository;
 import dat3.kinoxp.repository.ShowingRepository;
@@ -45,18 +46,21 @@ class ShowingServiceH2Test {
     @BeforeEach
     void setUp(){
         if (dataIsInitialized) return;
-        movie1 = new Movie("Mamma Mia", 16, "Musical");
+        movie1 = new Movie("Mamma Mia", "12", "125 min", "Musical");
         movieRepository.save(movie1);
-        movie2 = new Movie("Inception", 16, "Musical");
+        movie2 = new Movie("Inception", "16", "135 min", "Thriller");
+
         movieRepository.save(movie2);
 
         showing1 = Showing.builder()
                 .time(LocalTime.of(16, 30))
                 .date(LocalDate.now().plusDays(2))
+                .type(ShowingType.REGULAR)
                 .movie(movie1)
                 .theater(theaterRepository.save(new Theater(1, 20, 10))).build();
         showing2 = Showing.builder()
                 .time(LocalTime.of(14, 30))
+                .type(ShowingType.REGULAR)
                 .date(LocalDate.now().plusDays(1))
                 .movie(movie2)
                 .theater(theaterRepository.save(new Theater(2, 25, 16))).build();
@@ -71,7 +75,9 @@ class ShowingServiceH2Test {
         ShowingRequest newShowing = ShowingRequest.builder()
                 .date(LocalDate.now().minusDays(1))
                 .time(LocalTime.of(16, 30))
-                .movieId(1)
+                .timeAfterShowing(30)
+                .premiere(1)
+                .movieId(movie1.getId())
                 .theaterId(1).build();
 
 
@@ -82,7 +88,14 @@ class ShowingServiceH2Test {
 
     @Test
     void createShowingOverlappingThrow() {
-        ShowingRequest newShowing = new ShowingRequest(LocalDate.now().plusDays(2), LocalTime.of(16, 30), 1, 1);
+        ShowingRequest newShowing = ShowingRequest.builder()
+                .date(LocalDate.now().plusDays(1))
+                .time(LocalTime.of(14, 45))
+                .timeAfterShowing(30)
+                .premiere(0)
+                .movieId(movie2.getId())
+                .theaterId(1).build();
+
         ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> service.createShowing(newShowing));
         assertEquals(HttpStatus.BAD_REQUEST, exception.getStatusCode());
         assertEquals("Time is overlapping another showing", exception.getReason());
@@ -90,7 +103,14 @@ class ShowingServiceH2Test {
 
     @Test
     void createShowingValidTime() {
-        ShowingRequest newShowing = new ShowingRequest(LocalDate.now().plusDays(2), LocalTime.of(14, 30), movie1.getId(), 1);
+        ShowingRequest newShowing = ShowingRequest.builder()
+                .date(LocalDate.now().plusDays(1))
+                .time(LocalTime.of(17, 30))
+                .timeAfterShowing(30)
+                .premiere(0)
+                .movieId(movie2.getId())
+                .theaterId(1).build();
+
         ShowingResponse res = service.createShowing(newShowing);
         assertEquals(1, res.getMovieId());
     }

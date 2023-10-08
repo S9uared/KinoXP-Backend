@@ -15,4 +15,8 @@ public class ReservationRequest {
     private String phoneNumber;
     private int seatId;
     private int showingId;
+    private String firstName;
+    private String lastName;
+    private String email;
+
 }

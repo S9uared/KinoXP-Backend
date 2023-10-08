@@ -16,17 +16,21 @@ public class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Column(name = "phone_number")
-    private String phoneNumber;
     @ManyToOne
     @JoinColumn
     private Seat seat;
     @ManyToOne
     private Showing showing;
+    @ManyToOne
+    private CustomerInfo customerInfo;
 
-    public Reservation(String phoneNumber, Seat seat, Showing showing) {
-        this.phoneNumber = phoneNumber;
+
+    public Reservation(Seat seat, Showing showing, CustomerInfo customerInfo) {
         this.seat = seat;
         this.showing = showing;
+        this.customerInfo = customerInfo;
+        seat.addReservation(this);
+        showing.addReservation(this);
+        customerInfo.addReservation(this);
     }
 }

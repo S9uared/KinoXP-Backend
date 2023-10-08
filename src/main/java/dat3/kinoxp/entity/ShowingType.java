@@ -1,7 +1,7 @@
 package dat3.kinoxp.entity;
 
 public enum ShowingType {
-    MORNING,
+    REGULAR,
     EVENING,
     PREMIERE
 }

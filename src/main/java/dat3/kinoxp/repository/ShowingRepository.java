@@ -11,6 +11,6 @@ import java.util.List;
 public interface ShowingRepository extends JpaRepository<Showing, Integer> {
     List<Showing> getShowingsByDate(LocalDate date);
     List<Showing> getShowingsByMovieId(int movieId);
-    List<Showing> getShowingsByMovieCategory(String category);
+    List<Showing> getShowingsByMovieGenre(String genre);
     boolean existsByTheaterId(int id);
 }
