@@ -9,6 +9,7 @@ import dat3.kinoxp.entity.Theater;
 import dat3.kinoxp.repository.MovieRepository;
 import dat3.kinoxp.repository.ShowingRepository;
 import dat3.kinoxp.repository.TheaterRepository;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -44,7 +45,7 @@ public class ShowingService {
         LocalTime showingStartTime = body.getTime();
         LocalTime showingEndTime = showingStartTime.plusMinutes(parseRuntime(movie.getRuntime())).plusMinutes(body.getCleaningTime());
 
-        List<Showing> showingsOnDate = showingRepository.getShowingsByDate(body.getDate());
+        List<Showing> showingsOnDate = showingRepository.getShowingsByDateAndTheaterId(body.getDate(), body.getTheaterId());
 
         // Check for overlap with existing showings
         for (Showing s : showingsOnDate) {
@@ -64,6 +65,7 @@ public class ShowingService {
         return showings.stream().map(showing -> new ShowingResponse(showing)).toList();
     }
 
+
     public List<ShowingResponse> getShowingsByDate(LocalDate date){
         List<Showing> showings = showingRepository.getShowingsByDate(date);
         return showings.stream().map(showing -> new ShowingResponse(showing)).toList();
@@ -78,6 +80,10 @@ public class ShowingService {
         Showing showing = getShowingById(showingId);
         Movie movie = movieRepository.findById(body.getMovieId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Movie with this id does not exist"));
         Theater theater = theaterRepository.findById(body.getTheaterId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Theater with this id does not exist"));
+
+        // Not working - is compared to the existing showing in db and therefore cannot edit
+        checkForOverlapAndThrowException(body, movie);
+
         showing.setDate(body.getDate());
         showing.setTime(body.getTime());
         showing.setMovie(movie);
@@ -126,6 +132,20 @@ public class ShowingService {
         }
 
         return minutes;
+    }
+
+    private void checkForOverlapAndThrowException(ShowingRequest body, Movie movie) {
+        LocalTime showingStartTime = body.getTime();
+        LocalTime showingEndTime = showingStartTime.plusMinutes(parseRuntime(movie.getRuntime())).plusMinutes(body.getCleaningTime());
+
+        List<Showing> showingsOnDate = showingRepository.getShowingsByDateAndTheaterId(body.getDate(), body.getTheaterId());
+
+        // Check for overlap with existing showings
+        for (Showing s : showingsOnDate) {
+            if (!(showingEndTime.isBefore(s.getTime()) || showingStartTime.isAfter(s.getEndingTime()))) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Time is overlapping another showing");
+            }
+        }
     }
 
 }
