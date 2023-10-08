@@ -12,7 +12,7 @@ import java.util.List;
 @Getter
 @Setter
 @AllArgsConstructor
-@Builder //We will talk about this in the class
+@Builder
 @NoArgsConstructor
 @Entity
 public class Showing {

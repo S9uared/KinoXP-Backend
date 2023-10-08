@@ -55,12 +55,12 @@ class ShowingServiceH2Test {
         showing1 = Showing.builder()
                 .time(LocalTime.of(16, 30))
                 .date(LocalDate.now().plusDays(2))
-                .type(ShowingType.MORNING)
+                .type(ShowingType.REGULAR)
                 .movie(movie1)
                 .theater(theaterRepository.save(new Theater(1, 20, 10))).build();
         showing2 = Showing.builder()
                 .time(LocalTime.of(14, 30))
-                .type(ShowingType.MORNING)
+                .type(ShowingType.REGULAR)
                 .date(LocalDate.now().plusDays(1))
                 .movie(movie2)
                 .theater(theaterRepository.save(new Theater(2, 25, 16))).build();

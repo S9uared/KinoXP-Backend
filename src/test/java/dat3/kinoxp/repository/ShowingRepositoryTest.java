@@ -39,7 +39,7 @@ class ShowingRepositoryTest {
             movieOneId = movie1.getId();
             Theater theater1 = new Theater(1, 25, 16);
             theaterRepository.save(theater1);
-            Showing showing1 = showingRepository.save(new Showing(LocalDate.now(), LocalTime.of(16, 30), ShowingType.EVENING, movie1, theater1));
+            Showing showing1 = showingRepository.save(new Showing(LocalDate.now(), LocalTime.of(16, 30), ShowingType.EVENING, LocalTime.of(14, 15), movie1, theater1));
             showingOneId = showing1.getId();
 
             Movie movie2 = new Movie("Inception", "16", "135 min", "Thriller");
@@ -48,7 +48,7 @@ class ShowingRepositoryTest {
             movieTwoId = movie2.getId();
             Theater theater2 = new Theater(2, 20, 10);
             theaterRepository.save(theater2);
-            Showing showing2 = showingRepository.save(new Showing(LocalDate.now(), LocalTime.of(12, 45), ShowingType.MORNING, movie2, theater2));
+            Showing showing2 = showingRepository.save(new Showing(LocalDate.now(), LocalTime.of(12, 45), ShowingType.REGULAR, LocalTime.of(14, 15), movie2, theater2));
             showingTwoId = showing2.getId();
         }
     }

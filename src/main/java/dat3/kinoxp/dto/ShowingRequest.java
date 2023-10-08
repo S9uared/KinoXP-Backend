@@ -17,7 +17,7 @@ public class ShowingRequest {
     @JsonFormat(pattern = "HH:mm", shape = JsonFormat.Shape.STRING)
     private LocalTime time;
     private int timeAfterShowing;
-    private int premiere;
+    private boolean isPremiere;
     private int movieId;
     private int theaterId;
     private int cleaningTime = 30;

@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -55,7 +54,7 @@ public class ShowingService {
         }
 
         // If no overlap is found, create the showing
-        Showing showing = showingRepository.save(new Showing(body.getDate(), body.getTime(), getShowingType(body), showingEndTime, movie, theater));
+        Showing showing = showingRepository.save(new Showing(body.getDate(), body.getTime(), getShowingType(body.isPremiere(), body.getTime()), showingEndTime, movie, theater));
         return new ShowingResponse(showing);
     }
 
@@ -83,7 +82,7 @@ public class ShowingService {
         showing.setTime(body.getTime());
         showing.setMovie(movie);
         showing.setTheater(theater);
-        showing.setType(getShowingType(body));
+        showing.setType(getShowingType(body.isPremiere(), body.getTime()));
         Showing saved = showingRepository.save(showing);
         return new ShowingResponse(saved);
     }
@@ -93,12 +92,12 @@ public class ShowingService {
         showingRepository.delete(showing);
     }
 
-    private ShowingType getShowingType(ShowingRequest body) {
+    private ShowingType getShowingType(boolean isPremiere, LocalTime startTime) {
         ShowingType type;
-        if (body.getTime().isAfter(LocalTime.of(8, 0)) && body.getTime().isBefore(LocalTime.of(18, 0))) {
-            type = ShowingType.MORNING;
-        } else if (body.getPremiere() == 1) {
+        if(isPremiere){
             type = ShowingType.PREMIERE;
+        } else if (startTime.isAfter(LocalTime.of(8, 0)) && startTime.isBefore(LocalTime.of(18, 0))) {
+            type = ShowingType.REGULAR;
         } else {
             type = ShowingType.EVENING;
         }
