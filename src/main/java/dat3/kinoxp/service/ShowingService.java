@@ -82,7 +82,7 @@ public class ShowingService {
         Theater theater = theaterRepository.findById(body.getTheaterId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Theater with this id does not exist"));
 
         // Not working - is compared to the existing showing in db and therefore cannot edit
-        checkForOverlapAndThrowException(body, movie);
+        checkForOverlapAndThrowException(body, movie, showingId);
 
         showing.setDate(body.getDate());
         showing.setTime(body.getTime());
@@ -134,7 +134,7 @@ public class ShowingService {
         return minutes;
     }
 
-    private void checkForOverlapAndThrowException(ShowingRequest body, Movie movie) {
+    private void checkForOverlapAndThrowException(ShowingRequest body, Movie movie, int showingId) {
         LocalTime showingStartTime = body.getTime();
         LocalTime showingEndTime = showingStartTime.plusMinutes(parseRuntime(movie.getRuntime())).plusMinutes(body.getCleaningTime());
 
@@ -142,7 +142,11 @@ public class ShowingService {
 
         // Check for overlap with existing showings
         for (Showing s : showingsOnDate) {
-            if (!(showingEndTime.isBefore(s.getTime()) || showingStartTime.isAfter(s.getEndingTime()))) {
+            /*if (!(showingEndTime.isBefore(s.getTime()) || showingStartTime.isAfter(s.getEndingTime()))) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Time is overlapping another showing");
+            }*/
+            if (s.getId() != showingId && // Exclude the edited showing
+                    !(showingEndTime.isBefore(s.getTime()) || showingStartTime.isAfter(s.getEndingTime()))) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Time is overlapping another showing");
             }
         }
