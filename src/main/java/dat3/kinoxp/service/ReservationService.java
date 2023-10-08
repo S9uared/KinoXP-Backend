@@ -11,6 +11,7 @@ import dat3.kinoxp.repository.CustomerInfoRepository;
 import dat3.kinoxp.repository.ReservationRepository;
 import dat3.kinoxp.repository.SeatRepository;
 import dat3.kinoxp.repository.ShowingRepository;
+import dat3.kinoxp.repository.SeatRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
