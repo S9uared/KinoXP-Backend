@@ -44,8 +44,9 @@ public class MovieService {
         return response;
     }
 
-    public Movie getMovieByImdbId(String imdbId) {
-        return movieRepository.findByImdbID(imdbId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Movie not found"));
+    public MovieOmdbResponse getMovieByImdbId(String imdbId) {
+        Movie movie = movieRepository.findByImdbID(imdbId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Movie not found"));
+        return new MovieOmdbResponse(movie);
     }
 
 

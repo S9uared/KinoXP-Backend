@@ -24,7 +24,7 @@ public class MovieController {
     }
 
      @RequestMapping("/imdbid/{imdbId}")
-    public Movie getMovie(@PathVariable String imdbId) {
+    public MovieOmdbResponse getMovie(@PathVariable String imdbId) {
         return movieService.getMovieByImdbId(imdbId);
     }
 
