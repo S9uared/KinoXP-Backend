@@ -20,4 +20,7 @@ public class ShowingRequest {
     private int premiere;
     private int movieId;
     private int theaterId;
+    private int cleaningTime = 30;
+
+
 }

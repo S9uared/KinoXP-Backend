@@ -1,12 +1,16 @@
 package dat3.kinoxp.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import dat3.kinoxp.entity.Movie;
+import dat3.kinoxp.entity.Showing;
 import lombok.*;
 
 import java.util.List;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class MovieOmdbResponse {
 
     @JsonProperty("Title")
@@ -83,6 +87,28 @@ public class MovieOmdbResponse {
 
     @JsonProperty("Response")
     private String response;
+
+
+    public MovieOmdbResponse(Movie movie) {
+
+        this.title = movie.getTitle();
+        this.year = movie.getYear();
+        this.rated = movie.getRated();
+        this.released = movie.getReleased();
+        this.runtime = movie.getRuntime();
+        this.genre = movie.getGenre();
+        this.director = movie.getDirector();
+        this.writer = movie.getWriter();
+        this.actors = movie.getActors();
+        this.plot = movie.getPlot();
+        this.poster = movie.getPoster();
+        this.metascore = movie.getMetascore();
+        this.imdbRating = movie.getImdbRating();
+        this.imdbID = movie.getImdbID();
+        this.imdbVotes = movie.getImdbVotes();
+        this.website = movie.getWebsite();
+        this.response = movie.getResponse();
+    }
 
     @Getter @Setter
     public static class Rating {

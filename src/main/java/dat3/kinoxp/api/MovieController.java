@@ -1,12 +1,12 @@
 package dat3.kinoxp.api;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import dat3.kinoxp.dto.MovieOmdbResponse;
 import dat3.kinoxp.entity.Movie;
 import dat3.kinoxp.service.MovieService;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("api/movies")
@@ -18,7 +18,12 @@ public class MovieController {
         this.movieService = movieService;
     }
 
-    @RequestMapping("/imdbid/{imdbId}")
+    @GetMapping
+    public List<MovieOmdbResponse> getMovies() {
+        return movieService.getAllMovies();
+    }
+
+     @RequestMapping("/imdbid/{imdbId}")
     public Movie getMovie(@PathVariable String imdbId) {
         return movieService.getMovieByImdbId(imdbId);
     }

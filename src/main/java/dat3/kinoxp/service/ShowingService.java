@@ -33,7 +33,6 @@ public class ShowingService {
     }
 
     public ShowingResponse createShowing(ShowingRequest body) {
-
         Movie movie = movieRepository.findById(body.getMovieId()).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No movie with this id found"));
         Theater theater = theaterRepository.findById(body.getTheaterId()).orElseThrow(
@@ -43,23 +42,20 @@ public class ShowingService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Date is in the past");
         }
 
-        LocalDateTime showingStartTime = body.getDate().atTime(body.getTime());
-        LocalDateTime showingEndTime = showingStartTime.plusMinutes(parseRuntime(movie.getRuntime())).minusMinutes(1);
+        LocalTime showingStartTime = body.getTime();
+        LocalTime showingEndTime = showingStartTime.plusMinutes(parseRuntime(movie.getRuntime())).plusMinutes(body.getCleaningTime());
 
         List<Showing> showingsOnDate = showingRepository.getShowingsByDate(body.getDate());
 
         // Check for overlap with existing showings
         for (Showing s : showingsOnDate) {
-            LocalDateTime existingStartTime = s.getDate().atTime(s.getTime());
-            LocalDateTime existingEndTime = existingStartTime.plusMinutes(parseRuntime(s.getMovie().getRuntime())).minusMinutes(1);
-
-            if (!(showingEndTime.isBefore(existingStartTime) || showingStartTime.isAfter(existingEndTime))) {
+            if (!(showingEndTime.isBefore(s.getTime()) || showingStartTime.isAfter(s.getEndingTime()))) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Time is overlapping another showing");
             }
         }
 
         // If no overlap is found, create the showing
-        Showing showing = showingRepository.save(new Showing(body.getDate(), body.getTime(), getShowingType(body), movie, theater));
+        Showing showing = showingRepository.save(new Showing(body.getDate(), body.getTime(), getShowingType(body), showingEndTime, movie, theater));
         return new ShowingResponse(showing);
     }
 

@@ -14,6 +14,7 @@ import java.util.List;
 
 public class MovieOmdbRequest {
 
+
     private String title;
     private String year;
     private String rated;
@@ -39,26 +40,4 @@ public class MovieOmdbRequest {
     private String production;
     private String website;
     private String response;
-
-
 }
-
-/*
-    private String movieName;
-    private int ageRestriction;
-    private String category;
-
-    public Movie getMovieEntity(MovieRequest movieRequest) {
-        return new Movie(
-                movieRequest.getMovieName(),
-                movieRequest.getAgeRestriction(),
-                movieRequest.getCategory()
-        );
-    }
-
-    public MovieRequest(Movie movie) {
-        this.movieName = movie.getMovieName();
-        this.ageRestriction = movie.getAgeRestriction();
-        this.category = movie.getCategory();
-    }
-}*/

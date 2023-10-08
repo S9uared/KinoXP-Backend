@@ -75,19 +75,3 @@ public class Movie {
         this.genre = genre;
     }
 }
-    /*
-    @Column(name = "movie_name")
-    private String movieName;
-
-    @Column(name = "age_restriction")
-    private int ageRestriction;
-
-    @Column(name = "category")
-    private String category;
-
-    public Movie(String movieName, int ageRestriction, String category) {
-        this.movieName = movieName;
-        this.ageRestriction = ageRestriction;
-        this.category = category;
-    }
-    */

@@ -10,6 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class MovieService {
 
@@ -29,6 +32,16 @@ public class MovieService {
     public MovieService(MovieRepository movieRepository, OmdbFacade omdbFacade) {
         this.movieRepository = movieRepository;
         this.omdbFacade = omdbFacade;
+    }
+
+    public List<MovieOmdbResponse> getAllMovies() {
+        List<Movie> movies = movieRepository.findAll();
+        List<MovieOmdbResponse> response = new ArrayList<>();
+        for (Movie movie : movies) {
+            MovieOmdbResponse movieResponse = new MovieOmdbResponse(movie);
+            response.add(movieResponse);
+        }
+        return response;
     }
 
     public Movie getMovieByImdbId(String imdbId) {
