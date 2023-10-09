@@ -1,8 +1,10 @@
 package dat3.kinoxp.configuration;
 
+import dat3.kinoxp.dto.TheaterRequest;
 import dat3.kinoxp.entity.Theater;
 import dat3.kinoxp.repository.MovieRepository;
 import dat3.kinoxp.repository.TheaterRepository;
+import dat3.kinoxp.service.TheaterService;
 import dat3.security.entity.Role;
 import dat3.security.entity.UserWithRoles;
 import org.springframework.boot.ApplicationArguments;
@@ -15,6 +17,7 @@ import dat3.security.repository.UserWithRolesRepository;
 public class DeveloperData implements ApplicationRunner {
 
     TheaterRepository theaterRepository;
+    TheaterService theaterService;
     MovieRepository movieRepository;
     UserWithRolesRepository userWithRolesRepository;
     PasswordEncoder passwordEncoder;
@@ -31,9 +34,10 @@ public class DeveloperData implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) {
         setupUserWithRoleUsers();
-        Theater theater1 = new Theater(1, 25, 16);
+        theaterService.createTheater(TheaterRequest.builder().
+                id(1).rows(25).seatsPerRow(16).
+                build());
         Theater theater2 = new Theater(2, 20, 12);
-        theaterRepository.save(theater1);
         theaterRepository.save(theater2);
     }
 
