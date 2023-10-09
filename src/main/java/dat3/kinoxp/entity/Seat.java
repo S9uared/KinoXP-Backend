@@ -34,6 +34,7 @@ public class Seat
     private String type;
 
     @OneToMany(mappedBy = "seat", cascade = CascadeType.PERSIST, fetch=FetchType.LAZY)
+    @JoinColumn
     List<Reservation> reservations;
 
     public void addReservation(Reservation reservation){
