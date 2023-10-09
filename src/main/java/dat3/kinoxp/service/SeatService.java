@@ -76,5 +76,4 @@ public class SeatService {
         return seatRepository.findById(seatId).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND,"No Theater with this id found"));
     }
-
 }

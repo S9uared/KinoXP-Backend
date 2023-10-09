@@ -31,11 +31,15 @@ public class Reservation {
     private CustomerInfo customerInfo;
 
 
-    public Reservation(Showing showing, CustomerInfo customerInfo) {
+    public Reservation(Showing showing, CustomerInfo customerInfo/*, List<Seat> seats*/) {
         this.showing = showing;
         this.customerInfo = customerInfo;
-       // seat.addReservation(this);
+//        this.seats = seats;
         showing.addReservation(this);
         customerInfo.addReservation(this);
+        //for (Seat seat : seats){
+        //    seat.addReservation(this);
+        //}
+
     }
 }

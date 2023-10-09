@@ -14,15 +14,16 @@ import java.util.List;
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 
-public class ReservationResponse {
-    private int id;
-    private int showingId;
-    private String phoneNumber;
-    private List<Seat> seats;
+    public class ReservationResponse {
+        private int id;
+        private int showingId;
+        private String phoneNumber;
+        private List<SeatResponse> seats;
 
-    public ReservationResponse(Reservation reservation) {
-        this.id = reservation.getId();
-        this.showingId = reservation.getShowing().getId();
-        this.seats = reservation.getSeats();
+        public ReservationResponse(Reservation reservation) {
+            this.id = reservation.getId();
+            this.showingId = reservation.getShowing().getId();
+            this.phoneNumber = reservation.getCustomerInfo().getPhoneNumber();
+            this.seats = reservation.getSeats().stream().map(seat -> new SeatResponse(seat)).toList();
+        }
     }
-}

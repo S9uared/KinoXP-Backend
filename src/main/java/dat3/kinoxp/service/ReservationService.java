@@ -36,31 +36,39 @@ public class ReservationService {
 
     // Skal den tjekke at der ikke allerede eksistere en lignende reservation
     public ReservationResponse createReservation(ReservationRequest body) {
+        List<Seat> selectedSeats = new ArrayList<>();
         if(!showingRepository.existsById(body.getShowingId())){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Showing with that id does not exist");
         }
         if(!customerInfoRepository.existsByPhoneNumber(body.getPhoneNumber())) {
             customerInfoRepository.save(new CustomerInfo(body.getPhoneNumber(), body.getFirstName(), body.getLastName(), body.getEmail()));
         }
+        if(body.getSeatIds().size() > 0){
+            selectedSeats = seatRepository.findAllById(body.getSeatIds());
+        }
 
-        List<Seat> selectedSeats = new ArrayList<>();
+
+
+        /*List<Seat> selectedSeats = new ArrayList<>();
         for(Integer seat : body.getSeatIds()){
             selectedSeats.add(seatRepository.findById(seat).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Seat with this id does not exist")));
-        }
+        }*/
         Showing showing = showingRepository.findById(body.getShowingId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Showing with this id does not exist"));
-        for(Seat seat : selectedSeats){
-            reservationRepository.existsBySeatAndShowing(seat, showing);
+        // Check seat availability
+        for (Seat seat : selectedSeats) {
+            if (reservationRepository.existsBySeatAndShowing(seat, showing)) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Seat is already reserved");
+            }
         }
         CustomerInfo info = customerInfoRepository.findCustomerInfoByPhoneNumber(body.getPhoneNumber());
 
-
         Reservation reservation = new Reservation(showing, info);
         reservation.setSeats(selectedSeats);
-        reservationRepository.save(reservation);
         for(Seat seat : selectedSeats){
             seat.addReservation(reservation);
         }
+        reservationRepository.save(reservation);
         return new ReservationResponse(reservation);
     }
 
@@ -112,4 +120,5 @@ public class ReservationService {
         Reservation reservation = getReservationById(reservationId);
         reservationRepository.delete(reservation);
     }
+
 }
