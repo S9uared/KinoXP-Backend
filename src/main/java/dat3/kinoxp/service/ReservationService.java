@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -38,19 +39,28 @@ public class ReservationService {
         if(!showingRepository.existsById(body.getShowingId())){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Showing with that id does not exist");
         }
-        if(reservationRepository.existsByShowingIdAndSeatId(body.getShowingId(), body.getSeatId())){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Already reserved, buddy :)");
-        }
-        if (!customerInfoRepository.existsByPhoneNumber(body.getPhoneNumber())){
+        if(!customerInfoRepository.existsByPhoneNumber(body.getPhoneNumber())) {
             customerInfoRepository.save(new CustomerInfo(body.getPhoneNumber(), body.getFirstName(), body.getLastName(), body.getEmail()));
         }
-        Seat seat = seatRepository.findById(body.getSeatId()).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Seat with this id does not exist"));
-        CustomerInfo info = customerInfoRepository.findCustomerInfoByPhoneNumber(body.getPhoneNumber());
+
+        List<Seat> selectedSeats = new ArrayList<>();
+        for(Integer seat : body.getSeatIds()){
+            selectedSeats.add(seatRepository.findById(seat).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Seat with this id does not exist")));
+        }
         Showing showing = showingRepository.findById(body.getShowingId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Showing with this id does not exist"));
+        for(Seat seat : selectedSeats){
+            reservationRepository.existsBySeatAndShowing(seat, showing);
+        }
+        CustomerInfo info = customerInfoRepository.findCustomerInfoByPhoneNumber(body.getPhoneNumber());
 
-        Reservation reservation = reservationRepository.save(new Reservation(seat, showing, info));
+
+        Reservation reservation = new Reservation(showing, info);
+        reservation.setSeats(selectedSeats);
+        reservationRepository.save(reservation);
+        for(Seat seat : selectedSeats){
+            seat.addReservation(reservation);
+        }
         return new ReservationResponse(reservation);
     }
 

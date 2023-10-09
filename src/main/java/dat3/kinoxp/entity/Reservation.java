@@ -20,7 +20,9 @@ public class Reservation {
     private int id;
 
     @ManyToMany
-    @JoinColumn
+    @JoinTable(name = "seat_reservation",
+            joinColumns = @JoinColumn(name = "reservation_id"),
+            inverseJoinColumns = @JoinColumn(name = "seat_id"))
     private List<Seat> seats;
 
     @ManyToOne
@@ -29,11 +31,10 @@ public class Reservation {
     private CustomerInfo customerInfo;
 
 
-    public Reservation(Seat seat, Showing showing, CustomerInfo customerInfo) {
-        this.seat = seat;
+    public Reservation(Showing showing, CustomerInfo customerInfo) {
         this.showing = showing;
         this.customerInfo = customerInfo;
-        seat.addReservation(this);
+       // seat.addReservation(this);
         showing.addReservation(this);
         customerInfo.addReservation(this);
     }

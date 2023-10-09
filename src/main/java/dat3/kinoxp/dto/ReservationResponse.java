@@ -2,7 +2,10 @@ package dat3.kinoxp.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import dat3.kinoxp.entity.Reservation;
+import dat3.kinoxp.entity.Seat;
 import lombok.*;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -15,11 +18,11 @@ public class ReservationResponse {
     private int id;
     private int showingId;
     private String phoneNumber;
-    private int seatId;
+    private List<Seat> seats;
 
     public ReservationResponse(Reservation reservation) {
         this.id = reservation.getId();
         this.showingId = reservation.getShowing().getId();
-        this.seatId = reservation.getSeat().getId();
+        this.seats = reservation.getSeats();
     }
 }
