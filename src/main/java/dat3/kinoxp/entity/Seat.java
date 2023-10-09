@@ -33,8 +33,7 @@ public class Seat
     @Column(name="type")
     private String type;
 
-    @OneToMany(mappedBy = "seat", cascade = CascadeType.PERSIST, fetch=FetchType.LAZY)
-    @JoinColumn
+    @ManyToMany(mappedBy = "seats", cascade = CascadeType.PERSIST, fetch=FetchType.LAZY)
     List<Reservation> reservations;
 
     public void addReservation(Reservation reservation){

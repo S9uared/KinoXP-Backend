@@ -21,14 +21,14 @@ public class DeveloperData implements ApplicationRunner {
     MovieRepository movieRepository;
     UserWithRolesRepository userWithRolesRepository;
     PasswordEncoder passwordEncoder;
-    String passwordUsedByAll;
+    String passwordUsedByAll = "123";
 
-    public DeveloperData(UserWithRolesRepository userWithRolesRepository, PasswordEncoder passwordEncoder, MovieRepository movieRepository, TheaterRepository theaterRepository) {
+    public DeveloperData(TheaterRepository theaterRepository, TheaterService theaterService, MovieRepository movieRepository, UserWithRolesRepository userWithRolesRepository, PasswordEncoder passwordEncoder) {
+        this.theaterRepository = theaterRepository;
+        this.theaterService = theaterService;
+        this.movieRepository = movieRepository;
         this.userWithRolesRepository = userWithRolesRepository;
         this.passwordEncoder = passwordEncoder;
-        passwordUsedByAll = "test12";
-        this.theaterRepository = theaterRepository;
-        this.movieRepository = movieRepository;
     }
 
     @Override

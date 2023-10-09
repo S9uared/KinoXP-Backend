@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.mapping.ToOne;
 
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -16,8 +18,11 @@ public class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @ManyToOne
-    private Seat seat;
+
+    @ManyToMany
+    @JoinColumn
+    private List<Seat> seats;
+
     @ManyToOne
     private Showing showing;
     @ManyToOne
