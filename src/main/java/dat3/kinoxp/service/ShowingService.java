@@ -9,12 +9,12 @@ import dat3.kinoxp.entity.Theater;
 import dat3.kinoxp.repository.MovieRepository;
 import dat3.kinoxp.repository.ShowingRepository;
 import dat3.kinoxp.repository.TheaterRepository;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -33,7 +33,6 @@ public class ShowingService {
     }
 
     public ShowingResponse createShowing(ShowingRequest body) {
-
         Movie movie = movieRepository.findById(body.getMovieId()).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No movie with this id found"));
         Theater theater = theaterRepository.findById(body.getTheaterId()).orElseThrow(
@@ -43,23 +42,20 @@ public class ShowingService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Date is in the past");
         }
 
-        LocalDateTime showingStartTime = body.getDate().atTime(body.getTime());
-        LocalDateTime showingEndTime = showingStartTime.plusMinutes(parseRuntime(movie.getRuntime())).minusMinutes(1);
+        LocalTime showingStartTime = body.getTime();
+        LocalTime showingEndTime = showingStartTime.plusMinutes(parseRuntime(movie.getRuntime())).plusMinutes(body.getCleaningTime());
 
-        List<Showing> showingsOnDate = showingRepository.getShowingsByDate(body.getDate());
+        List<Showing> showingsOnDate = showingRepository.getShowingsByDateAndTheaterId(body.getDate(), body.getTheaterId());
 
         // Check for overlap with existing showings
         for (Showing s : showingsOnDate) {
-            LocalDateTime existingStartTime = s.getDate().atTime(s.getTime());
-            LocalDateTime existingEndTime = existingStartTime.plusMinutes(parseRuntime(s.getMovie().getRuntime())).minusMinutes(1);
-
-            if (!(showingEndTime.isBefore(existingStartTime) || showingStartTime.isAfter(existingEndTime))) {
+            if (!(showingEndTime.isBefore(s.getTime()) || showingStartTime.isAfter(s.getEndingTime()))) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Time is overlapping another showing");
             }
         }
 
         // If no overlap is found, create the showing
-        Showing showing = showingRepository.save(new Showing(body.getDate(), body.getTime(), getShowingType(body), movie, theater));
+        Showing showing = showingRepository.save(new Showing(body.getDate(), body.getTime(), getShowingType(body.isPremiere(), body.getTime()), showingEndTime, movie, theater));
         return new ShowingResponse(showing);
     }
 
@@ -68,6 +64,7 @@ public class ShowingService {
         List<Showing> showings = showingRepository.findAll();
         return showings.stream().map(showing -> new ShowingResponse(showing)).toList();
     }
+
 
     public List<ShowingResponse> getShowingsByDate(LocalDate date){
         List<Showing> showings = showingRepository.getShowingsByDate(date);
@@ -83,11 +80,15 @@ public class ShowingService {
         Showing showing = getShowingById(showingId);
         Movie movie = movieRepository.findById(body.getMovieId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Movie with this id does not exist"));
         Theater theater = theaterRepository.findById(body.getTheaterId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Theater with this id does not exist"));
+
+        // Not working - is compared to the existing showing in db and therefore cannot edit
+        checkForOverlapAndThrowException(body, movie, showingId);
+
         showing.setDate(body.getDate());
         showing.setTime(body.getTime());
         showing.setMovie(movie);
         showing.setTheater(theater);
-        showing.setType(getShowingType(body));
+        showing.setType(getShowingType(body.isPremiere(), body.getTime()));
         Showing saved = showingRepository.save(showing);
         return new ShowingResponse(saved);
     }
@@ -97,12 +98,12 @@ public class ShowingService {
         showingRepository.delete(showing);
     }
 
-    private ShowingType getShowingType(ShowingRequest body) {
+    private ShowingType getShowingType(boolean isPremiere, LocalTime startTime) {
         ShowingType type;
-        if (body.getTime().isAfter(LocalTime.of(8, 0)) && body.getTime().isBefore(LocalTime.of(18, 0))) {
-            type = ShowingType.MORNING;
-        } else if (body.getPremiere() == 1) {
+        if(isPremiere){
             type = ShowingType.PREMIERE;
+        } else if (startTime.isAfter(LocalTime.of(8, 0)) && startTime.isBefore(LocalTime.of(18, 0))) {
+            type = ShowingType.REGULAR;
         } else {
             type = ShowingType.EVENING;
         }
@@ -131,6 +132,24 @@ public class ShowingService {
         }
 
         return minutes;
+    }
+
+    private void checkForOverlapAndThrowException(ShowingRequest body, Movie movie, int showingId) {
+        LocalTime showingStartTime = body.getTime();
+        LocalTime showingEndTime = showingStartTime.plusMinutes(parseRuntime(movie.getRuntime())).plusMinutes(body.getCleaningTime());
+
+        List<Showing> showingsOnDate = showingRepository.getShowingsByDateAndTheaterId(body.getDate(), body.getTheaterId());
+
+        // Check for overlap with existing showings
+        for (Showing s : showingsOnDate) {
+            /*if (!(showingEndTime.isBefore(s.getTime()) || showingStartTime.isAfter(s.getEndingTime()))) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Time is overlapping another showing");
+            }*/
+            if (s.getId() != showingId && // Exclude the edited showing
+                    !(showingEndTime.isBefore(s.getTime()) || showingStartTime.isAfter(s.getEndingTime()))) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Time is overlapping another showing");
+            }
+        }
     }
 
 }

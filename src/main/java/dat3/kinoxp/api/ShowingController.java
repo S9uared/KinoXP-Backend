@@ -31,7 +31,7 @@ public class ShowingController {
     }
 
     @GetMapping(path = "/date/{date}")
-    List<ShowingResponse> getShowingsByDate(@PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) throws Exception{
+    List<ShowingResponse> getShowingsByDate(@PathVariable("date") @DateTimeFormat(pattern = "dd-MM-yyyy") LocalDate date) throws Exception{
         return showingService.getShowingsByDate(date);
     }
 
