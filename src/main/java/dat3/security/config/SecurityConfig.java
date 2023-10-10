@@ -94,6 +94,7 @@ public class SecurityConfig {
             .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.GET, "/api/showings")).permitAll()
             .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.GET, "/api/showings/date/{date}")).permitAll()
             .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.GET, "/api/showings/{id}")).permitAll()
+            .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.GET, "/api/showings/{movieId}/{date}")).permitAll()
             .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.POST, "/api/showings")).hasAuthority("ADMIN")
             .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.PUT, "/api/showings/{id}")).hasAuthority("ADMIN")
             .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.DELETE, "/api/showings/{id}")).hasAuthority("ADMIN")

@@ -13,6 +13,8 @@ import java.util.List;
 @AllArgsConstructor
 public class MovieOmdbResponse {
 
+    private int id;
+
     @JsonProperty("Title")
     private String title;
 
@@ -91,6 +93,7 @@ public class MovieOmdbResponse {
 
     public MovieOmdbResponse(Movie movie, boolean forShowing) {
 
+        this.id = movie.getId();
         this.title = movie.getTitle();
         this.year = movie.getYear();
         this.released = movie.getReleased();
