@@ -89,25 +89,28 @@ public class MovieOmdbResponse {
     private String response;
 
 
-    public MovieOmdbResponse(Movie movie) {
+    public MovieOmdbResponse(Movie movie, boolean forShowing) {
 
         this.title = movie.getTitle();
         this.year = movie.getYear();
-        this.rated = movie.getRated();
         this.released = movie.getReleased();
         this.runtime = movie.getRuntime();
         this.genre = movie.getGenre();
         this.director = movie.getDirector();
-        this.writer = movie.getWriter();
-        this.actors = movie.getActors();
-        this.plot = movie.getPlot();
         this.poster = movie.getPoster();
-        this.metascore = movie.getMetascore();
-        this.imdbRating = movie.getImdbRating();
-        this.imdbID = movie.getImdbID();
-        this.imdbVotes = movie.getImdbVotes();
-        this.website = movie.getWebsite();
-        this.response = movie.getResponse();
+        this.plot = movie.getPlot();
+
+        if (!forShowing) {
+            this.writer = movie.getWriter();
+            this.actors = movie.getActors();
+            this.metascore = movie.getMetascore();
+            this.imdbVotes = movie.getImdbVotes();
+            this.website = movie.getWebsite();
+            this.response = movie.getResponse();
+            this.imdbID = movie.getImdbID();
+            this.imdbRating = movie.getImdbRating();
+            this.rated = movie.getRated();
+        }
     }
 
     @Getter @Setter
