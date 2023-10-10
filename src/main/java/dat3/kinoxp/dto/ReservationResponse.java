@@ -17,13 +17,13 @@ import java.util.List;
     public class ReservationResponse {
         private int id;
         private int showingId;
-        private String phoneNumber;
+        private CustomerInfoResponse customerInfo;
         private List<SeatResponse> seats;
 
         public ReservationResponse(Reservation reservation) {
             this.id = reservation.getId();
             this.showingId = reservation.getShowing().getId();
-            this.phoneNumber = reservation.getCustomerInfo().getPhoneNumber();
+            this.customerInfo = new CustomerInfoResponse(reservation.getCustomerInfo());
             this.seats = reservation.getSeats().stream().map(seat -> new SeatResponse(seat)).toList();
         }
     }

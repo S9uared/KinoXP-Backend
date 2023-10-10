@@ -19,6 +19,11 @@ public class ReservationController {
         this.reservationService = reservationService;
     }
 
+    @GetMapping("/{phoneNumber}")
+    public List<ReservationResponse> getReservationsByPhoneNumber(@PathVariable String phoneNumber){
+        return reservationService.getReservationsByPhoneNumber(phoneNumber);
+    }
+
     @GetMapping("/showing/{showingId}")
     public List<ReservationResponse> getReservationsForShowing(@PathVariable int showingId) {
         return reservationService.viewReservationsForShowing(showingId);

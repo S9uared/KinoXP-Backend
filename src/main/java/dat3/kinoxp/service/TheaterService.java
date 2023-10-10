@@ -64,7 +64,7 @@ public class TheaterService {
         List<Seat> newSeats = new ArrayList<>();
         for(int rowNumber = 1; rowNumber <= theater.getRows(); rowNumber++){
             for(int seatNumber = 1; seatNumber <= theater.getSeatsPerRow(); seatNumber++){
-                newSeats.add(new Seat(theater, rowNumber, seatNumber, "available", "standard"));
+                newSeats.add(new Seat(theater, rowNumber, seatNumber, "In order", "standard"));
             }
         }
         seatRepository.saveAll(newSeats);

@@ -1,6 +1,7 @@
 package dat3.kinoxp.service;
 
 import dat3.kinoxp.dto.CustomerInfoRequest;
+import dat3.kinoxp.dto.CustomerInfoResponse;
 import dat3.kinoxp.dto.ReservationRequest;
 import dat3.kinoxp.dto.ReservationResponse;
 import dat3.kinoxp.entity.CustomerInfo;
@@ -47,14 +48,9 @@ public class ReservationService {
             selectedSeats = seatRepository.findAllById(body.getSeatIds());
         }
 
-
-
-        /*List<Seat> selectedSeats = new ArrayList<>();
-        for(Integer seat : body.getSeatIds()){
-            selectedSeats.add(seatRepository.findById(seat).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Seat with this id does not exist")));
-        }*/
         Showing showing = showingRepository.findById(body.getShowingId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Showing with this id does not exist"));
+
         // Check seat availability
         for (Seat seat : selectedSeats) {
             if (reservationRepository.existsBySeatAndShowing(seat, showing)) {
