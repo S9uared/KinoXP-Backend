@@ -31,11 +31,10 @@ public class StatisticService {
 
     public List<StatisticResponse> getStatistics(){
         List<Statistic> statistics = statisticRepository.findAll();
-        //Maps statistics list to a statisticReponse list.
         return statistics.stream().map((statistic) -> new StatisticResponse(statistic)).toList();
     }
 
-    public List<StatisticResponse> getStatisticsById(int id){
+    public List<StatisticResponse> getStatisticsByMovieId(int id){
         List<Statistic> statistics = statisticRepository.getStatisticsByMovieId(id);
         return statistics.stream().map((statistic) -> new StatisticResponse(statistic)).toList();
     }
@@ -116,4 +115,7 @@ public class StatisticService {
         return statisticRepository.findById(id).
                 orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,"Statistic with that id, does not exist"));
     }
+
+
+
 }

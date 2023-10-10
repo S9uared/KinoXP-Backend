@@ -100,7 +100,7 @@ public class SecurityConfig {
 
             // STATISTICCONTROLLER
             .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.GET, "/api/statistics")).hasAuthority("ADMIN")
-            .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.GET, "/api/statistics/{id}")).hasAuthority("ADMIN")
+            .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.GET, "/api/statistics/movie/{id}")).hasAuthority("ADMIN")
             .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.POST, "/api/statistics")).hasAuthority("ADMIN")
             .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.DELETE, "/api/statistics/{id}")).hasAuthority("ADMIN")
 

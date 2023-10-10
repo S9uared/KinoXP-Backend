@@ -26,9 +26,9 @@ public class StatisticController {
     }
 
     //Security -> ADMIN
-    @GetMapping("/{id}")
-    List<StatisticResponse> getStatisticsById(@PathVariable int id)throws Exception{
-        return statisticService.getStatisticsById(id);
+    @GetMapping("/movie/{id}")
+    List<StatisticResponse> getStatisticsByMovieId(@PathVariable int id)throws Exception{
+        return statisticService.getStatisticsByMovieId(id);
     }
 
     //Security -> ADMIN
