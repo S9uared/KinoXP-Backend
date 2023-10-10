@@ -61,7 +61,7 @@ public class ShowingService {
 
 
     public List<ShowingResponse> getShowings(){
-        List<Showing> showings = showingRepository.findAll();
+        List<Showing> showings = showingRepository.findAllOrderByDateAndTime();
         return showings.stream().map(showing -> new ShowingResponse(showing)).toList();
     }
 
