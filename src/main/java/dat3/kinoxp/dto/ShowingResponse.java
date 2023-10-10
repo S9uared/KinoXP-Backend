@@ -24,15 +24,15 @@ public class ShowingResponse {
     @JsonFormat(pattern = "HH:mm", shape = JsonFormat.Shape.STRING)
     private LocalTime time;
     private ShowingType type;
-    private int movieId;
     private int theaterId;
+    private MovieOmdbResponse movie;
 
     public ShowingResponse(Showing showing){
         this.id = showing.getId();
         this.date = showing.getDate();
         this.time = showing.getTime();
         this.type = showing.getType();
-        this.movieId = showing.getMovie().getId();
+        this.movie = new MovieOmdbResponse(showing.getMovie(), true);
         this.theaterId = showing.getTheater().getId();
     }
 }

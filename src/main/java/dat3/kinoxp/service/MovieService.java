@@ -38,7 +38,7 @@ public class MovieService {
         List<Movie> movies = movieRepository.findAll();
         List<MovieOmdbResponse> response = new ArrayList<>();
         for (Movie movie : movies) {
-            MovieOmdbResponse movieResponse = new MovieOmdbResponse(movie);
+            MovieOmdbResponse movieResponse = new MovieOmdbResponse(movie, false);
             response.add(movieResponse);
         }
         return response;
@@ -46,7 +46,7 @@ public class MovieService {
 
     public MovieOmdbResponse getMovieByImdbId(String imdbId) {
         Movie movie = movieRepository.findByImdbID(imdbId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Movie not found"));
-        return new MovieOmdbResponse(movie);
+        return new MovieOmdbResponse(movie, false);
     }
 
 
