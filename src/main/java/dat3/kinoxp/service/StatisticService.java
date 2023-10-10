@@ -81,7 +81,9 @@ public class StatisticService {
                             () -> new ResponseStatusException(HttpStatus.NOT_FOUND,"No Theater with this id found"));
                     theaterSeats = theater.getRows()*theater.getSeatsPerRow();
                     reservations = reservationRepository.findAllByShowingId(showingList.get(j).getId());
-                    result += (double) reservations.size()/theaterSeats;
+                    for(Reservation res : reservations){
+                        result += (double) res.getSeats().size()/theaterSeats;
+                    }
                 }
             }
         }
