@@ -77,7 +77,7 @@ public class SecurityConfig {
 
             // RESERVATIONCONTROLLER
             .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.GET, "/api/reservations/{phoneNumber}")).hasAuthority("USER")
-            .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.GET, "/api/reservations/showing/{showingId}")).hasAuthority("USER")
+            .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.GET, "/api/reservations/showing/{showingId}")).permitAll()
             .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.GET, "/api/reservations/reservation/{reservationId}")).hasAuthority("USER")
             .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.POST, "/api/reservations")).permitAll()
             .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.DELETE, "/api/reservations/{reservationId}")).hasAuthority("USER")
