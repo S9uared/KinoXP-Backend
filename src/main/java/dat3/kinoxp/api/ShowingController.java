@@ -20,31 +20,37 @@ public class ShowingController {
         this.showingService = showingService;
     }
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    ShowingResponse addShowing(@RequestBody ShowingRequest body){
-        return showingService.createShowing(body);
-    }
-
+    // Security -> Anonymous
     @GetMapping
     List<ShowingResponse> getShowings(){
         return showingService.getShowings();
     }
 
+    // Security -> Anonymous
     @GetMapping(path = "/date/{date}")
     List<ShowingResponse> getShowingsByDate(@PathVariable("date") @DateTimeFormat(pattern = "dd-MM-yyyy") LocalDate date) throws Exception{
         return showingService.getShowingsByDate(date);
     }
 
+    // Security -> Anonymous
     @GetMapping(path = "/{id}")
     ShowingResponse getShowingById(@PathVariable int id){
         return showingService.findById(id);
     }
 
+    // Security -> ADMIN
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    ShowingResponse addShowing(@RequestBody ShowingRequest body){
+        return showingService.createShowing(body);
+    }
+
+    // Security -> ADMIN
     @PutMapping("/{id}")
     ShowingResponse editShowing(@PathVariable int id, @RequestBody ShowingRequest body){
         return showingService.editShowing(body, id);
     }
 
+    // Security -> ADMIN
     @DeleteMapping("/{id}")
     void deleteShowingById(@PathVariable int id){
         showingService.deleteShowingById(id);

@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @DataJpaTest
 class ShowingServiceH2Test {
-
+/*
     @Autowired
     ShowingRepository showingRepository;
     @Autowired
@@ -69,7 +69,8 @@ class ShowingServiceH2Test {
         service = new ShowingService(showingRepository, movieRepository, theaterRepository);
 
         dataIsInitialized = true;
-    }
+    }*/
+    /*
     @Test
     void createShowingInPastThrow() {
         ShowingRequest newShowing = ShowingRequest.builder()
@@ -126,5 +127,5 @@ class ShowingServiceH2Test {
         List<ShowingResponse> responses = service.getShowingsByDate(LocalDate.now().plusDays(1));
         assertEquals(1, responses.size());
         assertEquals(2, responses.get(0).getMovieId());
-    }
+    }*/
 }

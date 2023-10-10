@@ -20,26 +20,31 @@ public class TheaterController {
         this.theaterService = theaterService;
     }
 
+    //Security -> ADMIN
     @GetMapping
     List<TheaterResponse> getTheaters(){
         return theaterService.getTheaters();
     }
 
+    //Security -> Anonymous
     @GetMapping("/{id}")
     TheaterResponse getTheaterById(@PathVariable int id){
         return theaterService.getOneTheater(id);
     }
 
+    //Security -> ADMIN
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     TheaterResponse addTheater(@RequestBody TheaterRequest body){
         return theaterService.createTheater(body);
     }
 
+    //Security -> ADMIN
     @PutMapping("/{id}")
     TheaterResponse editTheater(@RequestBody TheaterRequest body, @PathVariable int id){
         return theaterService.editTheater(body, id);
     }
 
+    //Security -> ADMIN
     @DeleteMapping("/{id}")
     void deleteTheater(@PathVariable int id){
         theaterService.deleteTheaterById(id);

@@ -18,51 +18,21 @@ public class MovieController {
         this.movieService = movieService;
     }
 
+    //Security -> Anonymous
     @GetMapping
     public List<MovieOmdbResponse> getMovies() {
         return movieService.getAllMovies();
     }
 
-     @RequestMapping("/imdbid/{imdbId}")
+    // Security -> Anonymous
+    @GetMapping("/imdbid/{imdbId}")
     public MovieOmdbResponse getMovie(@PathVariable String imdbId) {
         return movieService.getMovieByImdbId(imdbId);
     }
 
+    //Security -> ADMIN
     @PostMapping("/{imdbId}")
     public Movie addMovie(@PathVariable String imdbId) throws JsonProcessingException {
         return movieService.addMovie(imdbId);
     }
 }
-/*
-    private final MovieService movieService;
-
-    public MovieController(MovieService movieService) {
-        this.movieService = movieService;
-    }
-
-    @GetMapping
-    public List<MovieResponse> getMovies() {
-        return movieService.getAllMovies();
-    }
-
-    @GetMapping(path = "/{id}")
-    public MovieResponse getMovieById(@PathVariable int id) {
-        return movieService.getMovieById(id);
-    }
-
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public MovieResponse addMovie(@RequestBody MovieRequest body) {
-        return movieService.addMovie(body);
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<Void> editMovie(@RequestBody MovieRequest body, @PathVariable int id) {
-        return movieService.updateMovie(id, body);
-    }
-
-    @DeleteMapping("/{id}")
-    public void deleteMovieById(@PathVariable int id) {
-        movieService.deleteMovie(id);
-    }
-} */
-

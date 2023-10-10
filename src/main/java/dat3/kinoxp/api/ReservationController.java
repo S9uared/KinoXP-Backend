@@ -19,34 +19,33 @@ public class ReservationController {
         this.reservationService = reservationService;
     }
 
+    //Security -> USER
     @GetMapping("/{phoneNumber}")
     public List<ReservationResponse> getReservationsByPhoneNumber(@PathVariable String phoneNumber){
         return reservationService.getReservationsByPhoneNumber(phoneNumber);
     }
 
+    //Security -> USER
     @GetMapping("/showing/{showingId}")
     public List<ReservationResponse> getReservationsForShowing(@PathVariable int showingId) {
         return reservationService.viewReservationsForShowing(showingId);
     }
 
+    //Security -> USER
     @GetMapping("/reservation/{reservationId}")
     public ReservationResponse getReservationById(@PathVariable  int reservationId) {
         return reservationService.viewReservationById(reservationId);
     }
 
+    //Security -> Anonymous
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ReservationResponse createReservation(@RequestBody ReservationRequest body){
         return reservationService.createReservation(body);
     }
 
+    //Security -> USER
     @DeleteMapping("/{reservationId}")
     public void deleteReservation(@PathVariable int reservationId) {
         reservationService.deleteReservation(reservationId);
     }
-
-     /*@PutMapping("/{reservationId}")
-    public ReservationResponse editReservation(
-            @PathVariable int reservationId, @RequestBody ReservationRequest body) {
-        return reservationService.editReservation(body, reservationId);
-    }*/
 }

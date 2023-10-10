@@ -65,21 +65,60 @@ public class SecurityConfig {
             .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.POST, "/api/auth/login")).permitAll()
             .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.POST, "/api/user-with-role")).permitAll() //Clients can create a user for themself
 
-            //This is for demo purposes only, and should be removed for a real system
-            .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.GET, "/api/demo/anonymous")).permitAll()
 
             //Allow index.html and everything else on root level. So make sure to put ALL your endpoints under /api
             .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.GET,"/*")).permitAll()
-
             .requestMatchers(mvcMatcherBuilder.pattern("/error")).permitAll()
 
-            //This is for demo purposes only, and should be removed for a real system
+            // MOVIECONTROLLER
+            .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.GET, "/api/movies")).permitAll()
+            .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.GET, "/api/movies/imdbid/{imdbId}")).permitAll()
+            .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.POST, "/api/movies/{imdbId}")).hasAuthority("ADMIN")
+
+            // RESERVATIONCONTROLLER
+            .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.GET, "/api/reservations/{phoneNumber}")).hasAuthority("USER")
+            .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.GET, "/api/reservations/showing/{showingId}")).hasAuthority("USER")
+            .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.GET, "/api/reservations/reservation/{reservationId}")).hasAuthority("USER")
+            .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.POST, "/api/reservations")).permitAll()
+            .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.DELETE, "/api/reservations/{reservationId}")).hasAuthority("USER")
+
+            // SEATCONTROLLER
+            .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.GET, "/api/seats/theater/{id}")).permitAll()
+            .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.GET, "/api/seats/{id}")).hasAuthority("ADMIN")
+            .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.GET, "/api/seats/{id}/{type}")).hasAuthority("ADMIN")
+            .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.POST, "/api/seats")).hasAuthority("ADMIN")
+            .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.PUT, "/api/seats/{id}")).hasAuthority("ADMIN")
+            .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.DELETE, "/api/seats/{id}")).hasAuthority("ADMIN")
+
+            // SHOWINGCONTROLLER
+            .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.GET, "/api/showings")).permitAll()
+            .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.GET, "/api/showings/date/{date}")).permitAll()
+            .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.GET, "/api/showings/{id}")).permitAll()
+            .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.POST, "/api/showings")).hasAuthority("ADMIN")
+            .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.PUT, "/api/showings/{id}")).hasAuthority("ADMIN")
+            .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.DELETE, "/api/showings/{id}")).hasAuthority("ADMIN")
+
+            // STATISTICCONTROLLER
+            .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.GET, "/api/statistics")).hasAuthority("ADMIN")
+            .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.GET, "/api/statistics/{id}")).hasAuthority("ADMIN")
+            .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.POST, "/api/statistics")).hasAuthority("ADMIN")
+            .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.DELETE, "/api/statistics/{id}")).hasAuthority("ADMIN")
+
+            // THEATERCONTROLLER
+            .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.GET, "/api/theaters")).hasAuthority("ADMIN")
+            .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.GET, "/api/theaters/{id}")).permitAll()
+            .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.POST, "/api/theaters")).hasAuthority("ADMIN")
+            .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.PUT, "/api/theaters/{id}")).hasAuthority("ADMIN")
+            .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.DELETE, "/api/theaters/{id}")).hasAuthority("ADMIN")
+
+
+
             //.requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.GET, "/api/test/user-only")).hasAuthority("USER")
             //.requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.GET, "/api/test/admin-only")).hasAuthority("ADMIN")
 
             //Use this to completely disable security (Will not work if endpoints has been marked with @PreAuthorize)
-            .requestMatchers(mvcMatcherBuilder.pattern("/**")).permitAll());
-            //.anyRequest().authenticated());
+            //.requestMatchers(mvcMatcherBuilder.pattern("/**")).permitAll());
+            .anyRequest().authenticated());
 
     return http.build();
   }
@@ -122,5 +161,4 @@ public class SecurityConfig {
           throws Exception {
     return authenticationConfiguration.getAuthenticationManager();
   }
-
 }

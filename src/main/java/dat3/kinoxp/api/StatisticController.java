@@ -19,24 +19,25 @@ public class StatisticController {
         this.statisticService = statisticService;
     }
 
-    //Security -> Admin?
+    //Security -> ADMIN
     @GetMapping
     List<StatisticResponse> getStatistics(){
         return statisticService.getStatistics();
     }
 
-    //Security -> Admin
+    //Security -> ADMIN
     @GetMapping("/{id}")
     List<StatisticResponse> getStatisticsById(@PathVariable int id)throws Exception{
         return statisticService.getStatisticsById(id);
     }
 
-    //Security -> Admin
+    //Security -> ADMIN
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     StatisticResponse addStatistic(@RequestBody StatisticRequest body){
         return statisticService.addStatistic(body);
     }
 
+    //Security -> ADMIN
     @DeleteMapping("/{id}")
     ResponseEntity<Boolean> deleteStatistic(@PathVariable int id) {
         return statisticService.deleteStatById(id);

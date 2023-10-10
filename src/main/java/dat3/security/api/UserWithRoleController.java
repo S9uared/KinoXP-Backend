@@ -32,6 +32,8 @@ public class UserWithRoleController {
   public UserWithRolesResponse addRole(@PathVariable String username, @PathVariable String role) {
     return userWithRolesService.addRole(username, Role.fromString(role));
   }
+
+
   //Take care with this. This should NOT be something everyone can call
   @PreAuthorize("hasAuthority('ADMIN')")
   @PatchMapping("/remove-role/{username}/{role}")
