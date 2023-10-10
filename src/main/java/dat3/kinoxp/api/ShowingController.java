@@ -32,6 +32,11 @@ public class ShowingController {
         return showingService.getShowingsByDate(date);
     }
 
+    @GetMapping(path = "/{movieId}/{date}")
+    List<ShowingResponse> getShowingsByMovieAndDate(@PathVariable int movieId, @PathVariable @DateTimeFormat(pattern = "dd-MM-yyyy") LocalDate date) throws Exception{
+        return showingService.getShowingsByMovieAndDate(movieId, date);
+    }
+
     // Security -> Anonymous
     @GetMapping(path = "/{id}")
     ShowingResponse getShowingById(@PathVariable int id){

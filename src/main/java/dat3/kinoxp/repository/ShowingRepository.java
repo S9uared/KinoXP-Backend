@@ -15,10 +15,14 @@ public interface ShowingRepository extends JpaRepository<Showing, Integer> {
     List<Showing> getShowingsByDate(LocalDate date);
 
     List<Showing> getShowingsByDateAndTheaterId(LocalDate date, int theaterId);
+
+    List<Showing> getShowingsByMovieIdAndDate(int movieId, LocalDate date);
     List<Showing> getShowingsByMovieId(int movieId);
     List<Showing> getShowingsByMovieGenre(String genre);
     boolean existsByTheaterId(int id);
 
     @Query("SELECT s FROM Showing s WHERE s.date >= :currentDate ORDER BY s.date ASC, s.time ASC")
     List<Showing> findFutureShowingsOrderByDateAndTime(@Param("currentDate") LocalDate currentDate);
+
+
 }

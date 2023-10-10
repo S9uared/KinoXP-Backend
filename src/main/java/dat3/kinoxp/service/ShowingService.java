@@ -71,6 +71,11 @@ public class ShowingService {
         return showings.stream().map(showing -> new ShowingResponse(showing)).toList();
     }
 
+    public List<ShowingResponse> getShowingsByMovieAndDate(int movieId, LocalDate date){
+        List<Showing> showings = showingRepository.getShowingsByMovieIdAndDate(movieId, date);
+        return showings.stream().map(showing -> new ShowingResponse(showing)).toList();
+    }
+
     public ShowingResponse findById(int showingId){
         Showing showing = getShowingById(showingId);
         return new ShowingResponse(showing);
