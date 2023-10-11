@@ -24,6 +24,12 @@ public class MovieController {
         return movieService.getAllMovies();
     }
 
+    //Security -> Anonymous
+    @GetMapping("/{id}")
+    public MovieOmdbResponse getById(@PathVariable int id){
+        return movieService.getMovieById(id);
+    }
+
     // Security -> Anonymous
     @GetMapping("/imdbid/{imdbId}")
     public MovieOmdbResponse getMovie(@PathVariable String imdbId) {

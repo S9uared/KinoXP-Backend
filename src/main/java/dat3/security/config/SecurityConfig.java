@@ -72,6 +72,7 @@ public class SecurityConfig {
 
             // MOVIECONTROLLER
             .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.GET, "/api/movies")).permitAll()
+            .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.GET, "/api/movies/{id}")).permitAll()
             .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.GET, "/api/movies/imdbid/{imdbId}")).permitAll()
             .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.POST, "/api/movies/{imdbId}")).hasAuthority("ADMIN")
 
