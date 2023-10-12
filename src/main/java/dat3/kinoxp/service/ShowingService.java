@@ -7,6 +7,7 @@ import dat3.kinoxp.entity.Showing;
 import dat3.kinoxp.entity.ShowingType;
 import dat3.kinoxp.entity.Theater;
 import dat3.kinoxp.repository.MovieRepository;
+import dat3.kinoxp.repository.ReservationRepository;
 import dat3.kinoxp.repository.ShowingRepository;
 import dat3.kinoxp.repository.TheaterRepository;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -25,11 +26,13 @@ public class ShowingService {
     ShowingRepository showingRepository;
     MovieRepository movieRepository;
     TheaterRepository theaterRepository;
+    ReservationRepository reservationRepository;
 
-    public ShowingService(ShowingRepository showingRepository, MovieRepository movieRepository, TheaterRepository theaterRepository) {
+    public ShowingService(ShowingRepository showingRepository, MovieRepository movieRepository, TheaterRepository theaterRepository, ReservationRepository reservationRepository) {
         this.showingRepository = showingRepository;
         this.movieRepository = movieRepository;
         this.theaterRepository = theaterRepository;
+        this.reservationRepository = reservationRepository;
     }
 
     public ShowingResponse createShowing(ShowingRequest body) {
@@ -99,6 +102,9 @@ public class ShowingService {
     }
 
     public void deleteShowingById(int showingId){
+        if(reservationRepository.findAllByShowingId(showingId).size() > 0){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "There are reservations on this showing");
+        }
         Showing showing = getShowingById(showingId);
         showingRepository.delete(showing);
     }
