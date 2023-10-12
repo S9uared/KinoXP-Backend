@@ -12,7 +12,7 @@ public class SendGridExample {
         Email from = new Email("frejajep@hotmail.com");
         String subject = "Sending with Twilio SendGrid is Fun";
         Email to = new Email("frejajep2002@hotmail.com");
-        Content content = new Content("text/plain", "and easy to do anywhere, even with Java");
+        Content content = new Content("text/plain", "easy to do anywhere, even with Java");
         Mail mail = new Mail(from, subject, to, content);
 
         SendGrid sg = new SendGrid(System.getenv("SENDGRID_API_KEY"));
