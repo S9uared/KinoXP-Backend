@@ -6,7 +6,7 @@ import com.sendgrid.SendGrid;
 
 import java.io.IOException;
 
-public class SendGridExample {
+public class SendGridExample {/*
 
     public static void main(String[] args) throws IOException {
         Email from = new Email("frejajep@hotmail.com");
@@ -38,5 +38,5 @@ public class SendGridExample {
         } else {
             System.out.println("Failed to send the email. Status code: " + response.getStatusCode());
         }
-    }
+    }*/
 }

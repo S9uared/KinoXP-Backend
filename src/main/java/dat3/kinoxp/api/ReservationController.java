@@ -47,12 +47,6 @@ public class ReservationController {
     //Security -> USER
     @GetMapping("/reservation/{reservationId}")
     public ReservationResponse getReservationById(@PathVariable  int reservationId) throws IOException {
-        return reservationService.viewReservationById(reservationId);
-    }
-
-    //Security -> Anonymous
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ReservationResponse createReservation(@RequestBody ReservationRequest body) throws IOException {
         Email from = new Email("frejajep@hotmail.com");
         String subject = "Sending with Twilio SendGrid is Fun";
         Email to = new Email("frejajep2002@hotmail.com");
@@ -83,6 +77,12 @@ public class ReservationController {
         } else {
             System.out.println("Failed to send the email. Status code: " + response.getStatusCode());
         }
+        return reservationService.viewReservationById(reservationId);
+    }
+
+    //Security -> Anonymous
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ReservationResponse createReservation(@RequestBody ReservationRequest body) throws IOException {
         return reservationService.createReservation(body);
     }
 
