@@ -54,9 +54,10 @@ public class ReservationController {
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ReservationResponse createReservation(@RequestBody ReservationRequest body) throws IOException {
         Email from = new Email("frejajep@hotmail.com");
-        String subject = "Sending with Twilio SendGrid is Fun"; // change subject
-        Email to = new Email("frejajep2002@gmail.com"); //change to customer email
-        Content content = new Content("text/plain", "easy to do anywhere, even with Java"); //change content
+        String subject = "Your reservation at KinoXP"; // (change subject)
+        Email to = new Email(body.getEmail()); // (is this correct?)
+        Content content = new Content("text/plain", "Thank you for your reservation" +
+                body.getFirstName() + body.getLastName() + "You have reserved the following seat(s): " + body.getSeatIds()); // (change content)
         Mail mail = new Mail(from, subject, to, content);
 
         SendGrid sg = new SendGrid(System.getenv("SENDGRID_API_KEY"));
