@@ -88,6 +88,14 @@ public class MovieService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Could not add movie");
         }
     }
+    public void deleteMovie(int id) {
+        Movie movie = findMovieById(id);
+        movieRepository.delete(movie);
+    }
+    private Movie findMovieById(int id) {
+        return movieRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Movie with this id does not exist"));
+    }
 }
 
     /*
@@ -132,14 +140,8 @@ public class MovieService {
         return ResponseEntity.ok().build();
     }
 
-    public void deleteMovie(int id) {
-        Movie movie = findMovieById(id);
-        movieRepository.delete(movie);
-    }
 
-    private Movie findMovieById(int id) {
-        return movieRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Movie with this id does not exist"));
-    }
+
+
 }
 */

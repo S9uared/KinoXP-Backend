@@ -41,4 +41,9 @@ public class MovieController {
     public Movie addMovie(@PathVariable String imdbId) throws JsonProcessingException {
         return movieService.addMovie(imdbId);
     }
+
+    @DeleteMapping("/{id}")
+    public void deleteMovie(@PathVariable int id){
+        movieService.deleteMovie(id);
+    }
 }
