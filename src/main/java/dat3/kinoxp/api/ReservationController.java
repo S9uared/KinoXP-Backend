@@ -20,6 +20,12 @@ public class ReservationController {
     }
 
     //Security -> USER
+    @GetMapping
+    public List<ReservationResponse> getReservations(){
+        return reservationService.getAllReservations();
+    }
+
+    //Security -> USER
     @GetMapping("/{phoneNumber}")
     public List<ReservationResponse> getReservationsByPhoneNumber(@PathVariable String phoneNumber){
         return reservationService.getReservationsByPhoneNumber(phoneNumber);

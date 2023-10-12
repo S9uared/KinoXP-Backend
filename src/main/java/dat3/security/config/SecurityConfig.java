@@ -77,6 +77,7 @@ public class SecurityConfig {
             .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.POST, "/api/movies/{imdbId}")).hasAuthority("ADMIN")
 
             // RESERVATIONCONTROLLER
+            .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.GET, "/api/reservations")).hasAuthority("USER")
             .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.GET, "/api/reservations/{phoneNumber}")).hasAuthority("USER")
             .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.GET, "/api/reservations/showing/{showingId}")).permitAll()
             .requestMatchers(mvcMatcherBuilder.pattern(HttpMethod.GET, "/api/reservations/reservation/{reservationId}")).hasAuthority("USER")
