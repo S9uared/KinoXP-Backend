@@ -73,6 +73,11 @@ public class ReservationService {
             seat.addReservation(reservation);
         }
         reservationRepository.save(reservation);
+        try {
+            sendEmail(reservation);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return new ReservationResponse(reservation);
     }
 
