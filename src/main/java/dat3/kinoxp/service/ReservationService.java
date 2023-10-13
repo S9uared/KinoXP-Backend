@@ -1,5 +1,12 @@
 package dat3.kinoxp.service;
 
+import com.sendgrid.Method;
+import com.sendgrid.Request;
+import com.sendgrid.Response;
+import com.sendgrid.SendGrid;
+import com.sendgrid.helpers.mail.Mail;
+import com.sendgrid.helpers.mail.objects.Content;
+import com.sendgrid.helpers.mail.objects.Email;
 import dat3.kinoxp.dto.CustomerInfoRequest;
 import dat3.kinoxp.dto.CustomerInfoResponse;
 import dat3.kinoxp.dto.ReservationRequest;
@@ -17,6 +24,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,6 +74,39 @@ public class ReservationService {
         }
         reservationRepository.save(reservation);
         return new ReservationResponse(reservation);
+    }
+
+    public void sendEmail(Reservation reservation) throws IOException {
+        Email from = new Email("frejajep@hotmail.com");
+        String subject = "Your reservation at KinoXP"; // (change subject)
+        Email to = new Email(reservation.getCustomerInfo().getEmail());
+        Content content = new Content("text/plain", "Hello " +  reservation.getCustomerInfo().getFirstName() + " " +
+                        reservation.getCustomerInfo().getLastName() + "\n\n" + "Thank you for your reservation to see " +
+                        reservation.getShowing().getMovie().getTitle() + " at KinoXP. \n" +
+                        "\n You have reserved the following seats: " + reservation.getSeats().stream().map(seat -> seat.getRowNumber() + "-" + seat.getSeatNumber()).toList());
+        Mail mail = new Mail(from, subject, to, content);
+
+        SendGrid sg = new SendGrid(System.getenv("SENDGRID_API_KEY"));
+        Request request = new Request();
+
+        try {
+            request.setMethod(Method.POST);
+            request.setEndpoint("mail/send");
+            request.setBody(mail.build());
+            Response response = sg.api(request);
+            System.out.println(response.getStatusCode());
+            System.out.println(response.getBody());
+            System.out.println(response.getHeaders());
+            if (response.getStatusCode() == 202) {
+                System.out.println("Email sent successfully!");
+            } else {
+                System.out.println("Failed to send the email. Status code: " + response.getStatusCode());
+            }
+        } catch (
+                IOException ex) {
+            System.out.println("An error occured");
+            throw ex;
+        }
     }
 
    /* public ReservationResponse editReservation(ReservationRequest body, int reservationId) {
