@@ -85,10 +85,7 @@ public class ReservationService {
         Email from = new Email("frejajep@hotmail.com");
         String subject = "Your reservation at KinoXP"; // (change subject)
         Email to = new Email(reservation.getCustomerInfo().getEmail());
-        Content content = new Content("text/plain", "Hello " +  reservation.getCustomerInfo().getFirstName() + " " +
-                        reservation.getCustomerInfo().getLastName() + "\n\n" + "Thank you for your reservation to see " +
-                        reservation.getShowing().getMovie().getTitle() + " at KinoXP. \n" +
-                        "\n You have reserved the following seats: " + reservation.getSeats().stream().map(seat -> seat.getRowNumber() + "-" + seat.getSeatNumber()).toList());
+        Content content = new Content("text/plain", reservation.toString(reservation.getShowing().getMovie()));
         Mail mail = new Mail(from, subject, to, content);
 
         SendGrid sg = new SendGrid(System.getenv("SENDGRID_API_KEY"));
@@ -113,17 +110,6 @@ public class ReservationService {
             throw ex;
         }
     }
-
-   /* public ReservationResponse editReservation(ReservationRequest body, int reservationId) {
-        Reservation reservation = getReservationById(reservationId);
-
-        reservation.setShowingId(body.getShowing());
-        reservation.setSeatId(body.getSeat());
-
-        reservation = reservationRepository.save(reservation);
-        return new ReservationResponse(reservation);
-
-    }*/
 
     public List<ReservationResponse> getAllReservations() {
         List<Reservation> reservations = reservationRepository.findAll();

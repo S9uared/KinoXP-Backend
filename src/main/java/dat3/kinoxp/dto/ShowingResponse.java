@@ -23,16 +23,21 @@ public class ShowingResponse {
     private LocalDate date;
     @JsonFormat(pattern = "HH:mm", shape = JsonFormat.Shape.STRING)
     private LocalTime time;
+    private LocalTime endingTime;
     private ShowingType type;
     private int theaterId;
     private MovieOmdbResponse movie;
 
-    public ShowingResponse(Showing showing){
+    public ShowingResponse(Showing showing, boolean manager){
         this.id = showing.getId();
         this.date = showing.getDate();
         this.time = showing.getTime();
         this.type = showing.getType();
         this.movie = new MovieOmdbResponse(showing.getMovie(), true);
         this.theaterId = showing.getTheater().getId();
+
+        if (manager){
+            this.endingTime = showing.getEndingTime();
+        }
     }
 }

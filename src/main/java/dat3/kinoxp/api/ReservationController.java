@@ -1,22 +1,10 @@
 package dat3.kinoxp.api;
 
-import com.sendgrid.Method;
-import com.sendgrid.Request;
-import com.sendgrid.Response;
-import com.sendgrid.SendGrid;
-import com.sendgrid.helpers.mail.Mail;
-import com.sendgrid.helpers.mail.objects.Content;
-import com.sendgrid.helpers.mail.objects.Email;
 import dat3.kinoxp.dto.ReservationRequest;
 import dat3.kinoxp.dto.ReservationResponse;
-import dat3.kinoxp.entity.Reservation;
 import dat3.kinoxp.service.ReservationService;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import com.sendgrid.*;
-import com.sendgrid.helpers.mail.Mail;
-import com.sendgrid.helpers.mail.objects.*;
-import com.sendgrid.SendGrid;
 
 import java.io.IOException;
 
