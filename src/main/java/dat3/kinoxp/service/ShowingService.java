@@ -59,29 +59,29 @@ public class ShowingService {
 
         // If no overlap is found, create the showing
         Showing showing = showingRepository.save(new Showing(body.getDate(), body.getTime(), getShowingType(body.isPremiere(), body.getTime()), showingEndTime, movie, theater));
-        return new ShowingResponse(showing);
+        return new ShowingResponse(showing, true);
     }
 
 
     public List<ShowingResponse> getShowings(){
         List<Showing> showings = showingRepository.findFutureShowingsOrderByDateAndTime(LocalDate.now());
-        return showings.stream().map(showing -> new ShowingResponse(showing)).toList();
+        return showings.stream().map(showing -> new ShowingResponse(showing, true)).toList();
     }
 
 
     public List<ShowingResponse> getShowingsByDate(LocalDate date){
         List<Showing> showings = showingRepository.getShowingsByDate(date);
-        return showings.stream().map(showing -> new ShowingResponse(showing)).toList();
+        return showings.stream().map(showing -> new ShowingResponse(showing, false)).toList();
     }
 
     public List<ShowingResponse> getShowingsByMovieAndDate(int movieId, LocalDate date){
         List<Showing> showings = showingRepository.getShowingsByMovieIdAndDate(movieId, date);
-        return showings.stream().map(showing -> new ShowingResponse(showing)).toList();
+        return showings.stream().map(showing -> new ShowingResponse(showing, false)).toList();
     }
 
     public ShowingResponse findById(int showingId){
         Showing showing = getShowingById(showingId);
-        return new ShowingResponse(showing);
+        return new ShowingResponse(showing, false);
     }
 
     public ShowingResponse editShowing(ShowingRequest body, int showingId){
@@ -98,7 +98,7 @@ public class ShowingService {
         showing.setTheater(theater);
         showing.setType(getShowingType(body.isPremiere(), body.getTime()));
         Showing saved = showingRepository.save(showing);
-        return new ShowingResponse(saved);
+        return new ShowingResponse(saved, true);
     }
 
     public void deleteShowingById(int showingId){

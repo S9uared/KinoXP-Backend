@@ -42,4 +42,17 @@ public class Reservation {
         //}
 
     }
+
+
+    public String toString(Movie movie) {
+        String seatString = seats.stream().map(seat -> "Row "+seat.getRowNumber() + "Seat "+seat.getSeatNumber()+"\n").toString();
+        /*map(seat => Row ${seat.rowNumber}, Seat ${seat.seatNumber}).join('<br> ');*/
+        String email = "Hello " + customerInfo.getFirstName() + " " + getCustomerInfo().getLastName()
+                +"\n\n"+ "Thank you for your reservation to see "+
+                movie.getTitle() + " the " + showing.getDate() +" at KinoXP.\n\n"+
+                "You have reserved the following seats: "+"\n\n"+ seatString;
+
+
+        return email;
+    }
 }
