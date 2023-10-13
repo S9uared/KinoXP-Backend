@@ -53,34 +53,6 @@ public class ReservationController {
     //Security -> Anonymous
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ReservationResponse createReservation(@RequestBody ReservationRequest body) throws IOException {
-        Email from = new Email("frejajep@hotmail.com");
-        String subject = "Your reservation at KinoXP"; // (change subject)
-        Email to = new Email(body.getEmail()); // (is this correct?)
-        Content content = new Content("text/plain", "Thank you for your reservation" +
-                body.getFirstName() + body.getLastName() + "You have reserved the following seat(s): " + body.getSeatIds()); // (change content)
-        Mail mail = new Mail(from, subject, to, content);
-
-        SendGrid sg = new SendGrid(System.getenv("SENDGRID_API_KEY"));
-        Request request = new Request();
-
-        try {
-            request.setMethod(Method.POST);
-            request.setEndpoint("mail/send");
-            request.setBody(mail.build());
-            Response response = sg.api(request);
-            System.out.println(response.getStatusCode());
-            System.out.println(response.getBody());
-            System.out.println(response.getHeaders());
-            if (response.getStatusCode() == 202) {
-                System.out.println("Email sent successfully!");
-            } else {
-                System.out.println("Failed to send the email. Status code: " + response.getStatusCode());
-            }
-        } catch (
-                IOException ex) {
-            System.out.println("An error occured");
-            throw ex;
-        }
         return reservationService.createReservation(body);
     }
 
