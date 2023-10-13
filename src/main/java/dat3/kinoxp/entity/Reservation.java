@@ -5,6 +5,7 @@ import lombok.*;
 import org.hibernate.mapping.ToOne;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -34,23 +35,19 @@ public class Reservation {
     public Reservation(Showing showing, CustomerInfo customerInfo/*, List<Seat> seats*/) {
         this.showing = showing;
         this.customerInfo = customerInfo;
-//        this.seats = seats;
         showing.addReservation(this);
         customerInfo.addReservation(this);
-        //for (Seat seat : seats){
-        //    seat.addReservation(this);
-        //}
 
     }
 
 
     public String toString(Movie movie) {
-        String seatString = seats.stream().map(seat -> "Row "+seat.getRowNumber() + "Seat "+seat.getSeatNumber()+"\n").toString();
-        /*map(seat => Row ${seat.rowNumber}, Seat ${seat.seatNumber}).join('<br> ');*/
+        String seatString = seats.stream().map(seat -> "Row "+seat.getRowNumber() +" "+ "Seat "+seat.getSeatNumber()+"\n").collect(Collectors.joining());
         String email = "Hello " + customerInfo.getFirstName() + " " + getCustomerInfo().getLastName()
                 +"\n\n"+ "Thank you for your reservation to see "+
                 movie.getTitle() + " the " + showing.getDate() +" at KinoXP.\n\n"+
-                "You have reserved the following seats: "+"\n\n"+ seatString;
+                "You have reserved the following seats: "+"\n\n"+ seatString + "\n\n"+
+                "Kind regards\n"+"The Staff of KinoXP";
 
 
         return email;
